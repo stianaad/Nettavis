@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for NyhetssakDao.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="index.html">All files</a> NyhetssakDao.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">11.54% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>3/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">6.67% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/15</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">11.54% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>3/26</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @flow
+&nbsp;
+const Dao = require("./dao.js");
+&nbsp;
+module.exports = class NyhetssakDao extends Dao {
+<span class="fstat-no" title="function not covered" >  ge</span>tNyhetssakViktighet1(callback: (status: string, data: string) =&gt; void){
+<span class="cstat-no" title="statement not covered" >      super.query(</span>
+          `SELECT sakID,overskrift, bildelink,kategoriNavn FROM nyhetssak WHERE viktighet=1 ORDER BY antallLikes DESC`,
+          [],
+          callback
+      );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tAlleNyhetssaker(callback: (status: string, data: string) =&gt; void){
+<span class="cstat-no" title="statement not covered" >    super.query(</span>
+      "SELECT sakID,overskrift,kategoriNavn FROM nyhetssak ORDER BY overskrift",
+      [],
+      callback
+    );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  fi</span>ltrertPaaKategoriOgOverskrift(kategoriNavn: string,sokeOrd: string, callback: (status: string, data: string) =&gt; void){
+<span class="cstat-no" title="statement not covered" >    super.query(</span>
+      "SELECT sakID, overskrift FROM nyhetssak WHERE kategoriNavn=? AND overskrift LIKE ?",
+      [kategoriNavn,sokeOrd+'%'],
+      callback
+    )
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tNyhetssakerGittKategori(kategoriNavn: string,callback: (status: string, data: string) =&gt; void){
+<span class="cstat-no" title="statement not covered" >      super.query(</span>
+          `SELECT sakID,overskrift, bildelink,kategoriNavn FROM nyhetssak WHERE kategoriNavn=? ORDER BY antallLikes DESC`,
+          [kategoriNavn],
+          callback
+      );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tAlleKategorier(callback: (status: string, data: string) =&gt; void){
+<span class="cstat-no" title="statement not covered" >    super.query(</span>
+      "SELECT navn FROM kategori",
+      [],
+      callback
+    );
+  }
+&nbsp;
+  /*getNyesteNyhetssaker(callback){
+      super.query(
+          "SELECT overskrift, tidspunkt FROM nyhetssak ORDER BY tidspunkt DESC LIMIT 2",
+          [],
+          callback
+      );
+  }*/
+&nbsp;
+  getsakID(sakID: number, callback: (status: string, data: string) =&gt; void){
+      super.query(
+          "SELECT sakID,overskrift, innhold,DATE_FORMAT(tidspunkt, '%Y-%m-%d %H:%i') AS tidspunkt,antallLikes,bildelink,kategoriNavn,viktighet FROM nyhetssak WHERE sakID=?",
+          [sakID],
+          callback
+      );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  op</span>pdaterLikes(json: Object, sakID: number, callback: (status: string, data: string) =&gt; void){
+    const oppdater = <span class="cstat-no" title="statement not covered" >[json.antallLikes, sakID];</span>
+<span class="cstat-no" title="statement not covered" >    super.query(</span>
+      "UPDATE nyhetssak SET antallLikes=? WHERE sakID=?",
+      oppdater,
+      callback
+    );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  op</span>prettNyhetssak(json: Object, callback: (status: string, data: string) =&gt; void){
+      let sak = <span class="cstat-no" title="statement not covered" >[json.overskrift, json.innhold, json.bildelink,json.viktighet, json.kategoriNavn];</span>
+<span class="cstat-no" title="statement not covered" >      console.log("sak", sak);</span>
+<span class="cstat-no" title="statement not covered" >      super.query(</span>
+          "INSERT INTO nyhetssak VALUES(DEFAULT,?,DEFAULT,?,?,?,0,?)",
+          sak,
+          callback
+      );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  op</span>prettKommentar(json: Object, callback: (status: string, data: string) =&gt; void){
+    let kommentar = <span class="cstat-no" title="statement not covered" >[json.kommentarNavn, json.innhold, json.nyhetssakID];</span>
+<span class="cstat-no" title="statement not covered" >    console.log("kommentar", kommentar);</span>
+<span class="cstat-no" title="statement not covered" >    super.query(</span>
+      "INSERT INTO kommentarFelt VALUES(DEFAULT,?,?,?,DEFAULT,0)",
+      kommentar,
+      callback
+    );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tKommentarerGittSak(sakID: number,sorterEtterKolonne: string, sorteringsRekkefolge: string, callback: (status: string, data: string) =&gt; void){
+<span class="cstat-no" title="statement not covered" >    console.log("sakID",sakID);</span>
+<span class="cstat-no" title="statement not covered" >    super.query(</span>
+      `SELECT kommentarID,kommentarNavn,innhold,DATE_FORMAT(tidspunkt, '%Y-%m-%d %H:%i') AS tidspunkt,antallLikesKommentar FROM kommentarFelt WHERE nyhetssakID=? ORDER BY ${sorterEtterKolonne} ${sorteringsRekkefolge}`,
+      [sakID],
+      callback
+    )
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  op</span>pdaterLikesKommentar(json: Object, kommentarID: number, callback: (status: string, data: string) =&gt; void){
+    const oppdater = <span class="cstat-no" title="statement not covered" >[json.antallLikesKommentar, kommentarID];</span>
+<span class="cstat-no" title="statement not covered" >    super.query(</span>
+      "UPDATE kommentarFelt SET antallLikesKommentar=? WHERE kommentarID=?",
+      oppdater,
+      callback
+    );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  op</span>pdaterNyhetssak(json: Object,sakID: number, callback: (status: string, data: string) =&gt; void){
+      const oppdatering = <span class="cstat-no" title="statement not covered" >[json.overskrift, json.innhold, json.bildelink,json.viktighet, json.kategoriNavn,sakID];</span>
+<span class="cstat-no" title="statement not covered" >      super.query(</span>
+          "UPDATE nyhetssak SET overskrift=?,innhold=?,bildelink=?,viktighet=?,kategoriNavn=? WHERE sakID=?",
+          oppdatering,
+          callback
+      );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  sl</span>ettNyhetssak(sakID: number, callback: (status: string, data: string) =&gt; void){
+<span class="cstat-no" title="statement not covered" >      super.query(</span>
+          "DELETE FROM nyhetssak WHERE sakID=?",
+          [sakID],
+          callback
+      );
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  fi</span>ltrerNyhetssaker(overskrift: string,callback: (status: string, data: string) =&gt; void){
+<span class="cstat-no" title="statement not covered" >    console.log(overskrift);</span>
+<span class="cstat-no" title="statement not covered" >    super.query(</span>
+      "SELECT sakID, overskrift FROM nyhetssak WHERE overskrift LIKE ?",
+      [overskrift+'%'],
+      callback
+    )
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  ge</span>tLiveFeed(nr: number, callback: (status: string, data: string) =&gt; void){
+<span class="cstat-no" title="statement not covered" >    super.query(</span>
+      `SELECT sakID,overskrift,kategoriNavn, DATE_FORMAT(tidspunkt, '%Y-%m-%d %H:%i') AS tidspunkt FROM nyhetssak ORDER BY tidspunkt DESC LIMIT 0,5`,
+      [],
+      callback
+    )
+  }
+};</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Nov 16 2018 09:45:44 GMT+0100 (Vest-Europa (normaltid))
+</div>
+</div>
+<script src="prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="sorter.js"></script>
+</body>
+</html>
