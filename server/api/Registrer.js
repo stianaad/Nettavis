@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 var mysql = require("mysql");
 var bodyParser = require("body-parser");
-var atob = require('atob');
-var btoa = require('btoa');
+//var atob = require('atob');
+//var btoa = require('btoa');
 
 type Request = express$Request;
 type Response = express$Response;
