@@ -74,8 +74,8 @@ test("oppdater ein nyhetssak", done => {
     }
 
     nyhetssakDao.oppdaterNyhetssak(
-        {overskrift: "Liverpool vant", innhold: "LFC vant", bildelink: "https://d3j2s6hdd6a7rg.cloudfront.net/v2/uploads/media/default/0001/66/thumb_65953_default_news_size_5.jpeg", viktighet: 2, kategoriNavn: "Sport"},
-        16,
+        {overskrift: "Mourinho beholdt jobben", innhold: "United vant", bildelink: "https://d3j2s6hdd6a7rg.cloudfront.net/v2/uploads/media/default/0001/66/thumb_65953_default_news_size_5.jpeg", viktighet: 2, kategoriNavn: "Sport"},
+        4,
         callback
     );
 });
@@ -89,7 +89,7 @@ test("Oppdater likes", done => {
     done();
   }
 
-  nyhetssakDao.oppdaterLikes({antallLikes: 3},16,
+  nyhetssakDao.oppdaterLikes({antallLikes: 3},4,
     callback
   );
 });
@@ -104,7 +104,7 @@ test("Slett ein nyhetssak", done => { // MÅ kanskje fikse sånn at endepunktet 
     }
 
     nyhetssakDao.slettNyhetssak(
-        23,
+        4,
         callback
     );
 });
@@ -130,10 +130,9 @@ test("Hent nyhetssaker med viktighet 1", done => {
     console.log(
       "Test callback: status " + status + ", data= "+ JSON.stringify(data)
     );
-    expect(data.length).toBeGreaterThanOrEqual(3);
-    expect(data[0].overskrift).toBe("FIFA er korrupt"); // disse vil forandre seg hele tiden når folk like saker
-    expect(data[1].overskrift).toBe("Kultur er kjekt");
-    expect(data[2].overskrift).toBe("Norge vant");
+    expect(data.length).toBe(2);
+    expect(data[0].overskrift).toBe("Norge leder");
+    expect(data[1].overskrift).toBe("Apple lanserer ny iphone");
     done();
   }
 
@@ -147,10 +146,11 @@ test("Hent alle nyhetssaker", done => {
     console.log(
       "Test callback: status " + status + ", data= "+ JSON.stringify(data)
     );
-    expect(data.length).toBeGreaterThanOrEqual(9); // det var 9 nyhetssaker da denne testen ble utført, og dermed har eg brukt at det skal vær lik 9 elle meir visst testane blir køyrt seinare
-    expect(data[0].overskrift).toBe("Apple lanserer ny Iphone"); // desse vil forandre seg hele tida når det blir lagt til nnye saker
-    expect(data[1].overskrift).toBe("FIFA er korrupt");
-    expect(data[2].overskrift).toBe("Kultur er kjekt");
+    expect(data.length).toBe(4);
+    expect(data[0].overskrift).toBe("Android tatt for juks");
+    expect(data[1].overskrift).toBe("Apple lanserer ny Iphone");
+    expect(data[2].overskrift).toBe("FIFA er korrupt");
+    expect(data[3].overskrift).toBe("Norge leder");
     done();
   }
 
@@ -164,14 +164,13 @@ test("Hent alle nyhetssaker innen en gitt kategori", done => {
     console.log(
       "Test callback: status " + status + ", data= "+ JSON.stringify(data)
     );
-    expect(data.length).toBeGreaterThanOrEqual(3); // det var 3 nyhetssaker da denne testen ble utført, og dermed har eg brukt at det skal vær lik 9 elle meir visst testane blir køyrt seinare
-    expect(data[0].overskrift).toBe("Kultur er kjekt");
-    expect(data[1].overskrift).toBe("Nordmenn er født med ski på bena");
-    expect(data[2].overskrift).toBe("Kultur er viktig i hele verden");
+    expect(data.length).toBe(2);
+    expect(data[0].overskrift).toBe("Norge leder");
+    expect(data[1].overskrift).toBe("FIFA er korrupt");
     done();
   }
 
-  nyhetssakDao.getNyhetssakerGittKategori("Kultur",
+  nyhetssakDao.getNyhetssakerGittKategori("Sport",
     callback
   );
 });
@@ -202,7 +201,7 @@ test("Opprett ein kommentar", done => {
     done();
   }
 
-  nyhetssakDao.opprettKommentar({kommentarNavn: "Stian",innhold: "Dette er ein test",nyhetssakID: 10},
+  nyhetssakDao.opprettKommentar({kommentarNavn: "Stian",innhold: "Dette er ein test",nyhetssakID: 1},
     callback
   );
 });
@@ -217,7 +216,7 @@ test("Få kommentarer gitt sakID", done => {
     done();
   }
 
-  nyhetssakDao.getKommentarerGittSak(10,"kommentarID","asc",
+  nyhetssakDao.getKommentarerGittSak(1,"kommentarID","asc",
     callback
   );
 });
@@ -227,13 +226,12 @@ test("Søk etter nyhetssaker", done => {
     console.log(
       "Test callback: status " + status + ", data= "+ JSON.stringify(data)
     );
-    expect(data.length).toBeGreaterThanOrEqual(2);
-    expect(data[0].overskrift).toBe("Kultur er kjekt");
-    expect(data[1].overskrift).toBe("Kultur er viktig i hele verden");
+    expect(data.length).toBe(1);
+    expect(data[0].overskrift).toBe("FIFA er korrupt");
     done();
   }
 
-  nyhetssakDao.filtrerNyhetssaker("Kultur",
+  nyhetssakDao.filtrerNyhetssaker("FIFA",
     callback
   );
 });
@@ -243,10 +241,11 @@ test("Hent livefeed", done => {
     console.log(
       "Test callback: status " + status + ", data= "+ JSON.stringify(data)
     );
-    expect(data.length).toBe(5); // vil alltid hente ut dei fem nyaste sakene
-    expect(data[0].overskrift).toBe("Mourinho sparket");
-    expect(data[1].overskrift).toBe("test");
-    expect(data[2].overskrift).toBe("Pizza er godt");
+    expect(data.length).toBe(4); // vil alltid hente ut dei fem nyaste sakene
+    expect(data[0].overskrift).toBe("Android tatt for juks");
+    expect(data[1].overskrift).toBe("FIFA er korrupt");
+    expect(data[2].overskrift).toBe("Apple lanserer ny Iphone");
+    expect(data[3].overskrift).toBe("Norge leder");
     done();
   }
 

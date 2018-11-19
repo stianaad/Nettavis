@@ -134,7 +134,7 @@ module.exports = class NyhetssakDao extends Dao {
 
   getLiveFeed(callback: (status: string, data: string) => void){
     super.query(
-      `SELECT sakID,overskrift,kategoriNavn, DATE_FORMAT(tidspunkt, '%Y-%m-%d %H:%i') AS tidspunkt FROM nyhetssak ORDER BY tidspunkt DESC LIMIT 0,5`,
+      `SELECT sakID,overskrift,kategoriNavn, DATE_FORMAT(tidspunkt, '%Y-%m-%d %H:%i') AS tidspunkt FROM nyhetssak ORDER BY sakID DESC LIMIT 0,5`,
       [],
       callback
     )
