@@ -13,7 +13,7 @@ var pool = mysql.createPool({
     debug: false,
     multipleStatements: true
 });
-
+/*
 var ntnuPool = mysql.createPool({
   connectionLimit: 1,
   host: "mysql.stud.iie.ntnu.no",
@@ -22,12 +22,10 @@ var ntnuPool = mysql.createPool({
   database: "stianaad",
   debug: false,
   multipleStatements: true
-});
+});*/
 
 let nyhetssakDao = new NyhetssakDao(pool);
 let ntnuNyhetssakDao = new NyhetssakDao(ntnuPool);
-
-
 
 beforeAll(done => {
     runsqlfile("dao/createTable.sql", pool, () => {
@@ -122,7 +120,7 @@ test("Hent nyhetssaker med viktighet 1", done => {
     done();
   }
 
-  ntnuNyhetssakDao.getNyhetssakViktighet1(
+  nyhetssakDao.getNyhetssakViktighet1(
     callback
   );
 });
