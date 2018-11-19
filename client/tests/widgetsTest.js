@@ -51,7 +51,7 @@ describe('Overskrift tests', () => {
 
 describe('ContainerFluid tests', () => {
   const wrapper = shallow(
-    <ContainerFluid senterTekst={"text-center"}>
+    <ContainerFluid>
       <div className={"row"}/>
     </ContainerFluid>
   );
@@ -60,8 +60,8 @@ describe('ContainerFluid tests', () => {
     expect(wrapper.contains(<div className="row"/>)).toEqual(true);
   });
 
-  it('sjekke at parent() består av klassen container-fluid og text-center', () => {
-    expect(wrapper.find('div').parent().hasClass('container-fluid text-center')).toEqual(true);
+  it('sjekke at parent() består av klassen container-fluid', () => {
+    expect(wrapper.find('div').parent().hasClass('container-fluid')).toEqual(true);
   });
 }); // funke
 

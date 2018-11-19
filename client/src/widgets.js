@@ -142,9 +142,9 @@ export class Overskrift extends Component<{ children: React.Node }> {
   }
 }
 
-export class ContainerFluid extends Component<{senterTekst?: string, children: React.Node }> {
+export class ContainerFluid extends Component<{children: React.Node }> {
   render() {
-    return <div className={"container-fluid "+this.props.senterTekst}>{this.props.children}</div>;
+    return <div className={"container-fluid"}>{this.props.children}</div>;
   }
 }
 
