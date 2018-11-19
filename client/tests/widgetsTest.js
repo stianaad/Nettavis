@@ -164,7 +164,7 @@ describe('ListGroupItem tests', () => {
 describe('ListGroupInline tests', () => {
   const wrapper = shallow(
     <ListGroupInline>
-      <ListGroupInline.Item nokkel={1} to={"/test"}>
+      <ListGroupInline.Item to={"/test"}>
         <p>Test</p>
       </ListGroupInline.Item>
     </ListGroupInline>
@@ -173,7 +173,7 @@ describe('ListGroupInline tests', () => {
   it('sjekker at den matcher med oppsette i widgets', () => {
     expect(wrapper.matchesElement(
       <ul className={"list-inline"}>
-        <ListGroupInline.Item>
+        <ListGroupInline.Item to={"/test"}>
           <p>Test</p>
         </ListGroupInline.Item>
       </ul>
@@ -187,13 +187,13 @@ describe('ListGroupInline tests', () => {
 
 describe('ListGroupItemInline tests', () => {
   const wrapper = shallow(
-    <ListGroupInline.Item nokkel={1} to={"/test"}>
+    <ListGroupInline.Item  to={"/test"}>
       <p>Test</p>
     </ListGroupInline.Item>
   );
 
   it('sjekker parent til p for å sjå at den inneholder klassen list-inline-item mr-5 ml-5', () => {
-    expect(wrapper.find('p').parent().hasClass("list-inline-item mr-5 ml-5")).toEqual(true);
+    expect(wrapper.find('p').parent().hasClass("list-inline-item mt-2 mr-5 ml-5")).toEqual(true);
   });
 
   it('Sjekke ListgroupItem sine children', () => {
@@ -281,8 +281,8 @@ describe('Navbar tests', () => {
   const wrapper = shallow(
    <NavBar>
      <NavBar.Brand> Brand </NavBar.Brand>
-     <NavBar.Left> venstre </NavBar.Left>
-     <NavBar.Right> hoyre </NavBar.Right>
+     <NavBar.LinkLeft to={"/venstre"}> venstre </NavBar.LinkLeft>
+     <NavBar.LinkRight to={"/hoyre"}> hoyre </NavBar.LinkRight>
    </NavBar>
   );
 
