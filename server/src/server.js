@@ -5,7 +5,6 @@ var bodyParser = require("body-parser");
 var app = express();
 import reload from 'reload';
 import path from 'path';
-
 var apiRoutes = express.Router();
 app.use(bodyParser.json()); // for å tolke JSON
 const public_path = path.join(__dirname, '/../../client/public');

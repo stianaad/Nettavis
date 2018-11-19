@@ -13,7 +13,7 @@ var pool = mysql.createPool({
     debug: false,
     multipleStatements: true
 });
-/*
+
 var ntnuPool = mysql.createPool({
   connectionLimit: 1,
   host: "mysql.stud.iie.ntnu.no",
@@ -22,9 +22,11 @@ var ntnuPool = mysql.createPool({
   database: "stianaad",
   debug: false,
   multipleStatements: true
-});*/
+});
 
 let nyhetssakDao = new NyhetssakDao(pool);
+let ntnuNyhetssakDao = new NyhetssakDao(ntnuPool);
+
 
 
 beforeAll(done => {
@@ -109,22 +111,6 @@ test("Slett ein nyhetssak", done => { // MÅ kanskje fikse sånn at endepunktet 
     );
 });
 
-/*test("Hent nyhetssaker med viktighet 2", done => {
-    function callback(status, data){
-        console.log(
-            "Test callback: status " + status + ", data= "+ JSON.stringify(data)
-        );
-        expect(data.length).toBe(1);
-        expect(data[0].overskrift).toBe("FIFA er korrupt");
-        done();
-    }
-
-    nyhetssakDao.getNyhetssakViktighet2(
-        "Sport",
-        callback
-    );
-});*/ // venter litt med dinna
-
 test("Hent nyhetssaker med viktighet 1", done => {
   function callback(status, data){
     console.log(
@@ -132,7 +118,7 @@ test("Hent nyhetssaker med viktighet 1", done => {
     );
     expect(data.length).toBe(2);
     expect(data[0].overskrift).toBe("Norge leder");
-    expect(data[1].overskrift).toBe("Apple lanserer ny iphone");
+    expect(data[1].overskrift).toBe("Apple lanserer ny Iphone");
     done();
   }
 
@@ -165,12 +151,12 @@ test("Hent alle nyhetssaker innen en gitt kategori", done => {
       "Test callback: status " + status + ", data= "+ JSON.stringify(data)
     );
     expect(data.length).toBe(2);
-    expect(data[0].overskrift).toBe("Norge leder");
-    expect(data[1].overskrift).toBe("FIFA er korrupt");
+    expect(data[0].overskrift).toBe("Apple lanserer ny Iphone");
+    expect(data[1].overskrift).toBe("Android tatt for juks");
     done();
   }
 
-  nyhetssakDao.getNyhetssakerGittKategori("Sport",
+  ntnuNyhetssakDao.getNyhetssakerGittKategori("Tech",
     callback
   );
 });
@@ -211,8 +197,8 @@ test("Få kommentarer gitt sakID", done => {
     console.log(
       "Test callback: status " + status + ", data= "+ JSON.stringify(data)
     );
-    expect(data.length).toBeGreaterThanOrEqual(4);
-    expect(data[3].kommentarNavn).toBe("Stian");
+    expect(data.length).toBe(2);
+    expect(data[1].kommentarNavn).toBe("Stian");
     done();
   }
 
@@ -241,7 +227,7 @@ test("Hent livefeed", done => {
     console.log(
       "Test callback: status " + status + ", data= "+ JSON.stringify(data)
     );
-    expect(data.length).toBe(4); // vil alltid hente ut dei fem nyaste sakene
+    expect(data.length).toBe(4);
     expect(data[0].overskrift).toBe("Android tatt for juks");
     expect(data[1].overskrift).toBe("FIFA er korrupt");
     expect(data[2].overskrift).toBe("Apple lanserer ny Iphone");
@@ -249,7 +235,7 @@ test("Hent livefeed", done => {
     done();
   }
 
-  nyhetssakDao.getLiveFeed(0,
+  nyhetssakDao.getLiveFeed(
     callback
   );
 });
