@@ -149,8 +149,8 @@ test("Hent alle nyhetssaker innen en gitt kategori", done => {
       "Test callback: status " + status + ", data= "+ JSON.stringify(data)
     );
     expect(data.length).toBe(2);
-    expect(data[0].overskrift).toBe("Apple lanserer ny Iphone");
-    expect(data[1].overskrift).toBe("Android tatt for juks");
+    expect(data[0].overskrift).toBe("Android tatt for juks");
+    expect(data[1].overskrift).toBe("Apple lanserer ny Iphone");
     done();
   }
 
