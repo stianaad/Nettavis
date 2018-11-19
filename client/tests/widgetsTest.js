@@ -36,7 +36,6 @@ describe('Alert tests', () => {
     let instance: ?Alert = Alert.instance();
     expect(typeof instance).toEqual('object');
     if (instance) expect(instance.alerts).toEqual([]);
-
     expect(wrapper.find('button.close')).toHaveLength(0);
   });
 });
@@ -284,7 +283,7 @@ describe('Navbar tests', () => {
      <NavBar.Brand> Brand </NavBar.Brand>
      <NavBar.Left> venstre </NavBar.Left>
      <NavBar.Right> hoyre </NavBar.Right>
-   </NavBar.Brand>
+   </NavBar>
   );
 
   it('Sjekker at Input har de rette klassane', () => {

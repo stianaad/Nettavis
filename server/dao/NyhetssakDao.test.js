@@ -61,7 +61,7 @@ test("Opprett ein nyhetssak", done => {
     }
 
     nyhetssakDao.opprettNyhetssak(
-        {overskrift: "Mourinho sparket", innhold: "Etter at United ikkje klarte å vinne mot Chelsea så endte det med at Mourinho fekk sparken", bildelink: "https://c.ndtvimg.com/2018-09/rop4uba8_jose-mourinho-afp_625x300_22_September_18.jpg", viktighet: 1, kategoriNavn: "Sport"},
+        {overskrift: "Mourinho sparket", innhold: "Etter at United ikkje klarte å vinne mot Chelsea så endte det med at Mourinho fekk sparken", bildelink: "https://c.ndtvimg.com/2018-09/rop4uba8_jose-mourinho-afp_625x300_22_September_18.jpg", viktighet: 2, kategoriNavn: "Sport"},
         callback
     );
 });
@@ -106,7 +106,7 @@ test("Slett ein nyhetssak", done => { // MÅ kanskje fikse sånn at endepunktet 
     }
 
     nyhetssakDao.slettNyhetssak(
-        4,
+        5,
         callback
     );
 });
@@ -122,7 +122,7 @@ test("Hent nyhetssaker med viktighet 1", done => {
     done();
   }
 
-  nyhetssakDao.getNyhetssakViktighet1(
+  ntnuNyhetssakDao.getNyhetssakViktighet1(
     callback
   );
 });
