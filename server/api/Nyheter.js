@@ -53,12 +53,20 @@ router.get("/kommentarer/:sakID/:sorterEtterKolonne/:sorteringsRekkefolge",(req 
   });
 });
 
-router.get("/",(req : Request, res: Response) => {
-    console.log("/nyheter: fikk request fra klient");
-    nyhetssakDao.getNyhetssakViktighet1((status,data) => {
+router.get("/side/:sakNrStart",(req : Request, res: Response) => {
+    console.log("/nyheter/side/sakNrStart: fikk request fra klient");
+    nyhetssakDao.getNyhetssakViktighet1(req.params.sakNrStart,(status,data) => {
         res.status(status);
         res.json(data);
     });
+});
+
+router.get("/antallSaker",(req : Request, res: Response) => {
+  console.log("/antallSaker: fikk request fra klient");
+  nyhetssakDao.getAntSaker((status,data) => {
+    res.status(status);
+    res.json(data);
+  });
 });
 
 //trur ikkje eg bruke dinna

@@ -43,9 +43,17 @@ class Test {
   innhold: string;
 }
 
+class Antall{
+  antall: number;
+}
+
 class SakService {
-  getNyheter(): Promise<Sak[]> {
-    return axios.get('/nyheter/');
+  getNyheter(sakNrStart: number): Promise<Sak[]> {
+    return axios.get('/nyheter/side/'+sakNrStart);
+  }
+
+  getAntSaker(): Promise<Antall[]>{
+    return axios.get('/nyheter/antallSaker');
   }
 
   getNyeste(): Promise<Sak[]>{

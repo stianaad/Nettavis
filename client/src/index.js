@@ -124,7 +124,7 @@ class FramsideVisning extends Component{
   sideNr = 1;
   antallSider = 1;
   sakNrStart = 0;
-  sakNrSlutt = this.antallSakerPrSide;
+  antallSaker = 0;
 
   render() {
     return (
@@ -152,7 +152,7 @@ class FramsideVisning extends Component{
                 null
               )}
               Side {this.sideNr} av {this.antallSider}
-              {(this.sakNrSlutt<this.alleNyheter.length) ? (
+              {((this.sakNrStart+this.antallSakerPrSide)<this.antallSaker) ? (
                 <button type="button" style={{padding: 0, border: "none", backgroundColor: "white"}} className=" ml-4" onClick={this.nesteSide}>
                   <span><img src="https://www.freeiconspng.com/uploads/white-arrow-transparent-png-27.png" width="20" height="20"/></span>
                 </button>) : (
@@ -167,39 +167,46 @@ class FramsideVisning extends Component{
 
   nesteSide(){
     this.sakNrStart+=this.antallSakerPrSide;
-    this.sideNr ++;
-    this.sakNrSlutt += this.antallSakerPrSide;
-    if(this.sakNrSlutt>this.alleNyheter.length){
-      this.sakNrSlutt = this.alleNyheter.length;
-    }
-    this.delt.nyheter = this.alleNyheter.slice(this.sakNrStart,this.sakNrSlutt);
+    this.sideNr++;
+    sakService
+      .getNyheter(this.sakNrStart)
+      .then(nyheter => {
+        this.delt.nyheter=nyheter;
+      })
+      .catch((error: Error) => Alert.danger(error.message));
+
   }
 
   forrigeSide(){
-    console.log(this.sakNrSlutt);
-    this.sideNr--;
     this.sakNrStart-=this.antallSakerPrSide;
-    if(this.sakNrSlutt === this.alleNyheter.length){
-      this.sakNrSlutt-= ((this.sakNrSlutt%this.antallSakerPrSide===0) ? (this.antallSakerPrSide) : (this.sakNrSlutt%this.antallSakerPrSide));
-      console.log("sakNrSlutt;"+ this.sakNrSlutt);
-      console.log("sakNrStart;"+this.sakNrStart);
-    } else {
-      this.sakNrSlutt-= this.antallSakerPrSide;
-      console.log("sakNrSlutt;"+this.sakNrStart);
-      console.log("sakNrStart;"+this.sakNrSlutt);
-    }
-    this.delt.nyheter = this.alleNyheter.slice(this.sakNrStart,this.sakNrSlutt);
+    this.sideNr--;
+    sakService
+      .getNyheter(this.sakNrStart)
+      .then(nyheter => {
+        this.delt.nyheter=nyheter;
+      })
+      .catch((error: Error) => Alert.danger(error.message));
+
   }
 
   mounted(){
     sakService
-      .getNyheter()
+      .getNyheter(this.sakNrStart)
       .then(nyheter => {
-        this.alleNyheter = nyheter;
-        this.delt.nyheter = this.alleNyheter.slice(this.sakNrStart,this.antallSakerPrSide);
-        this.antallSider = Math.ceil((this.alleNyheter.length)/(this.antallSakerPrSide));
+        this.delt.nyheter=nyheter;
       })
       .catch((error: Error) => Alert.danger(error.message));
+
+    sakService
+      .getAntSaker()
+      .then(antall => {
+        this.antallSaker = antall[0].antall;
+        this.antallSider = Math.ceil(this.antallSaker/this.antallSakerPrSide);
+        console.log(antall[0].antall);
+      })
+      .catch((error: Error) => Alert.danger(error.message));
+
+
   }
 }
 

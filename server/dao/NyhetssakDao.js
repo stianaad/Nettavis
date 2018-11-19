@@ -3,13 +3,21 @@
 const Dao = require("./dao.js");
 
 module.exports = class NyhetssakDao extends Dao {
-  getNyhetssakViktighet1(callback: (status: string, data: string) => void){
+  getNyhetssakViktighet1(sakNrStart: number,callback: (status: string, data: string) => void){
       super.query(
-          `SELECT sakID,overskrift, bildelink,kategoriNavn FROM nyhetssak WHERE viktighet=1 ORDER BY antallLikes DESC`,
+          `SELECT sakID,overskrift, bildelink,kategoriNavn FROM nyhetssak WHERE viktighet=1 ORDER BY antallLikes DESC LIMIT ${sakNrStart},3`,
           [],
           callback
       );
   }
+
+  getAntSaker(callback: (status: string, data: string) => void){
+    super.query(
+      "SELECT COUNT(sakID) AS antall FROM nyhetssak WHERE viktighet=1",
+      [],
+      callback
+    )
+  };
 
   getAlleNyhetssaker(callback: (status: string, data: string) => void){
     super.query(

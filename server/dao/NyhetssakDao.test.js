@@ -120,7 +120,7 @@ test("Hent nyhetssaker med viktighet 1", done => {
     done();
   }
 
-  nyhetssakDao.getNyhetssakViktighet1(
+  nyhetssakDao.getNyhetssakViktighet1(0,
     callback
   );
 });
