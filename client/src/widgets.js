@@ -122,7 +122,6 @@ export class ListGroupInline extends Component<{
   }
 }
 
-
 export class CheckBox extends Component<{checkBoxNavn: string, forandring: Object,disable?: boolean}> {
   render(){
     return(
@@ -326,7 +325,6 @@ class FormInput extends Component<{
     );
   }
 }
-
 /**
  * Renders simplified form elements using Bootstrap classes
  */

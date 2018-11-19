@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Alert,Overskrift } from '../src/widgets.js';
 import { shallow, mount } from 'enzyme';
-import { Column, ContainerFluid, Row, ListGroup, ListGroupInline, Oppsett, Input, NavBar } from '../src/widgets';
+import { Column, ContainerFluid, Row, ListGroup, ListGroupInline, Oppsett, Input, NavBar, Card } from '../src/widgets';
 
 describe('Alert tests', () => {
   const wrapper = shallow(<Alert />);
@@ -277,6 +277,31 @@ describe('Input tests', () => {
   });
 });
 
+describe('NavbarBrand tests', () => {
+  const wrapper = shallow(
+   <NavBar.Brand>
+     Hei
+   </NavBar.Brand>
+  );
+
+  it('Sjekker at Brand har de rette klassane', () => {
+    expect(wrapper.find('NavLink').hasClass('navbar-brand')).toEqual(true);
+  });
+});
+
+describe('NavbarLink(left/right) tests', () => {
+  const wrapper = shallow(
+    <NavBar.LinkLeft to={"test"}>
+      Hei
+    </NavBar.LinkLeft>
+  );
+
+  it('Sjekker at Link har de rette klassane', () => {
+    expect(wrapper.find('NavLink').hasClass('nav-link')).toEqual(true);
+  });
+});
+
+/*
 describe('Navbar tests', () => {
   const wrapper = shallow(
    <NavBar>
@@ -293,6 +318,34 @@ describe('Navbar tests', () => {
   it('Sjekker chidren til Input', () => {
     expect(wrapper.find('div').children()).toHaveLength(3);
   });
+});
+*/
+
+describe('Card tests', () => {
+  const wrapper = shallow(
+    <Card title={"Test"} link={"bildeLink"} to={"/test"}>
+      hei
+    </Card>
+  );
+
+  it('Sjekker at img har de rette klassane', () => {
+    expect(wrapper.find('img').hasClass('card-img-top img-fluid')).toEqual(true);
+  });
+
+  it('Sjekker at Card har ein card-klasse', () => {
+    expect(wrapper.find('NavLink').parent().hasClass('card')).toEqual(true);
+  });
+
+  it('Sjekker at Card har ein body-klasse', () => {
+    expect(wrapper.find('NavLink').childAt(1).hasClass('card-body')).toEqual(true);
+  });
+
+  it('Sjekker at Card har to children', () => {
+    expect(wrapper.find('NavLink').children()).toHaveLength(2);
+  });
+
+
+
 });
 
 
