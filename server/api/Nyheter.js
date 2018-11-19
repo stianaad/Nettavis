@@ -63,7 +63,15 @@ router.get("/side/:sakNrStart",(req : Request, res: Response) => {
 
 router.get("/antallSaker",(req : Request, res: Response) => {
   console.log("/antallSaker: fikk request fra klient");
-  nyhetssakDao.getAntSaker((status,data) => {
+  nyhetssakDao.getAntSakerFramside((status,data) => {
+    res.status(status);
+    res.json(data);
+  });
+});
+
+router.get("/antallSaker/:kategoriNavn",(req : Request, res: Response) => {
+  console.log("/antallSaker: fikk request fra klient");
+  nyhetssakDao.getAntSakerKategori(req.params.kategoriNavn,(status,data) => {
     res.status(status);
     res.json(data);
   });
@@ -77,10 +85,10 @@ router.get("/nyeste", (req : Request, res: Response) => { // denne skal vises pÃ
     res.json(data);
   });
 });
-router.get("/gittKategori/:kategori", (req : Request, res: Response) => {
+router.get("/gittKategori/:kategori/:sakNrStart", (req : Request, res: Response) => {
   console.log("/kategori/:kategori: fikk request fra kleint");
   console.log(req.params.kategori);
-  nyhetssakDao.getNyhetssakerGittKategori(req.params.kategori, (status, data) => {
+  nyhetssakDao.getNyhetssakerGittKategori(req.params.sakNrStart,req.params.kategori, (status, data) => {
     res.status(status);
     res.json(data);
   });

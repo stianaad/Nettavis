@@ -11,10 +11,18 @@ module.exports = class NyhetssakDao extends Dao {
       );
   }
 
-  getAntSaker(callback: (status: string, data: string) => void){
+  getAntSakerFramside(callback: (status: string, data: string) => void){
     super.query(
       "SELECT COUNT(sakID) AS antall FROM nyhetssak WHERE viktighet=1",
       [],
+      callback
+    )
+  };
+
+  getAntSakerKategori(kategoriNavn: string,callback: (status: string, data: string) => void){
+    super.query(
+      "SELECT COUNT(sakID) AS antall FROM nyhetssak WHERE kategoriNavn=?",
+      [kategoriNavn],
       callback
     )
   };
@@ -35,9 +43,9 @@ module.exports = class NyhetssakDao extends Dao {
     )
   }
 
-  getNyhetssakerGittKategori(kategoriNavn: string,callback: (status: string, data: string) => void){
+  getNyhetssakerGittKategori(sakNrStart: number,kategoriNavn: string,callback: (status: string, data: string) => void){
       super.query(
-          `SELECT sakID,overskrift, bildelink,kategoriNavn FROM nyhetssak WHERE kategoriNavn=? ORDER BY antallLikes DESC`,
+          `SELECT sakID,overskrift, bildelink,kategoriNavn FROM nyhetssak WHERE kategoriNavn=? ORDER BY antallLikes DESC LIMIT ${sakNrStart},3`,
           [kategoriNavn],
           callback
       );

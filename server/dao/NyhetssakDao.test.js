@@ -154,7 +154,7 @@ test("Hent alle nyhetssaker innen en gitt kategori", done => {
     done();
   }
 
-  nyhetssakDao.getNyhetssakerGittKategori("Tech",
+  nyhetssakDao.getNyhetssakerGittKategori(0,"Tech",
     callback
   );
 });

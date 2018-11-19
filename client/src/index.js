@@ -205,8 +205,6 @@ class FramsideVisning extends Component{
         console.log(antall[0].antall);
       })
       .catch((error: Error) => Alert.danger(error.message));
-
-
   }
 }
 
@@ -217,10 +215,8 @@ class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
   antallSakerPrSide = 3;
   sideNr = 1;
   antallSider = 1;
-
+  antallSaker = 0;
   sakNrStart = 0;
-  sakNrSlutt = this.antallSakerPrSide;
-
   render() {
     return (
       <div>
@@ -247,7 +243,7 @@ class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
                 null
               )}
               Side {this.sideNr} av {this.antallSider}
-              {(this.sakNrSlutt<this.alleNyhetssakerGittKategori.length) ? (
+              {((this.sakNrStart+this.antallSakerPrSide)<this.antallSaker) ? (
                 <button type="button" style={{padding: 0, border: "none", backgroundColor: "white"}} className=" ml-4" onClick={this.nesteSide}>
                   <span><img src="https://www.freeiconspng.com/uploads/white-arrow-transparent-png-27.png" width="20" height="20"/></span>
                 </button>) : (
@@ -261,43 +257,47 @@ class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
   }
 
   nesteSide(){
-    this.sakNrStart+=this.antallSakerPrSide;
+    this.sakNrStart+= this.antallSakerPrSide;
     this.sideNr++;
-    this.sakNrSlutt = this.sakNrSlutt + this.antallSakerPrSide;
-    if(this.sakNrSlutt>this.alleNyhetssakerGittKategori.length){
-      this.sakNrSlutt = this.alleNyhetssakerGittKategori.length;
-    }
-    this.delt.kategori = this.alleNyhetssakerGittKategori.slice(this.sakNrStart,this.sakNrSlutt);
-  }
-
-  forrigeSide(){
-    console.log(this.sakNrSlutt);
-    this.sideNr--;
-    this.sakNrStart-=this.antallSakerPrSide;
-    if(this.sakNrSlutt === this.alleNyhetssakerGittKategori.length){
-      this.sakNrSlutt = this.sakNrSlutt - ((this.sakNrSlutt%this.antallSakerPrSide===0) ? (this.antallSakerPrSide) : (this.sakNrSlutt%this.antallSakerPrSide));
-      console.log("sakNrSlutt, if: ",this.sakNrSlutt);
-      console.log("sakNrStart, if: ",this.sakNrStart);
-    } else {
-      this.sakNrSlutt = this.sakNrSlutt - this.antallSakerPrSide;
-      console.log("sakNrSlutt, else: ",this.sakNrStart);
-      console.log("sakNrStart, else: ",this.sakNrSlutt);
-    }
-    this.delt.kategori = this.alleNyhetssakerGittKategori.slice(this.sakNrStart,this.sakNrSlutt);
-  }
-
-  mounted(){
     sakService
-      .getNyhetssakerGittKategori(this.props.match.params.kategorinavn)
+      .getNyhetssakerGittKategori(this.props.match.params.kategorinavn,this.sakNrStart)
       .then(kat => {
-        this.delt.kategori = kat.slice(0,this.antallSakerPrSide);
-        this.alleNyhetssakerGittKategori = kat;
-        this.sakNrStart = 0;
-        this.sakNrSlutt = this.antallSakerPrSide;
-        this.sideNr = 1;
-        this.antallSider = Math.ceil((this.alleNyhetssakerGittKategori.length)/(this.antallSakerPrSide));
+        this.delt.kategori = kat;
       })
       .catch((error: Error) => Alert.danger(error.message));
+    }
+
+  forrigeSide(){
+    this.sakNrStart-= this.antallSakerPrSide;
+    this.sideNr--;
+    sakService
+      .getNyhetssakerGittKategori(this.props.match.params.kategorinavn,this.sakNrStart)
+      .then(kat => {
+        this.delt.kategori = kat;
+      })
+      .catch((error: Error) => Alert.danger(error.message));
+   }
+
+  mounted(){
+    this.sakNrStart = 0;
+    this.sideNr=1;
+    sakService
+      .getNyhetssakerGittKategori(this.props.match.params.kategorinavn,this.sakNrStart)
+      .then(kat => {
+        this.delt.kategori = kat;
+         })
+      .catch((error: Error) => Alert.danger(error.message));
+
+    sakService
+      .getAntSakerKategori(this.props.match.params.kategorinavn)
+      .then(antall => {
+        this.antallSaker = antall[0].antall;
+        this.antallSider = Math.ceil(this.antallSaker/this.antallSakerPrSide);
+        console.log(antall[0].antall);
+      })
+      .catch((error: Error) => Alert.danger(error.message));
+
+
   }
 }
 

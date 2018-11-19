@@ -56,12 +56,16 @@ class SakService {
     return axios.get('/nyheter/antallSaker');
   }
 
+  getAntSakerKategori(kategoriNavn: string): Promise<Antall[]>{
+    return axios.get('/nyheter/antallSaker/'+kategoriNavn);
+  }
+
   getNyeste(): Promise<Sak[]>{
     return axios.get('/nyheter/nyeste');
   }
 
-  getNyhetssakerGittKategori(kategori: string): Promise<Sak[]>{
-    return axios.get('/nyheter/gittKategori/'+kategori);
+  getNyhetssakerGittKategori(kategori: string,sakNrStart: number): Promise<Sak[]>{
+    return axios.get('/nyheter/gittKategori/'+kategori+'/'+sakNrStart);
   }
 
   getSakID(sakID: number): Promise<Sak[]>{
