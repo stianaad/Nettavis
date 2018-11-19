@@ -25,7 +25,7 @@ var ntnuPool = mysql.createPool({
 });*/
 
 let nyhetssakDao = new NyhetssakDao(pool);
-let ntnuNyhetssakDao = new NyhetssakDao(ntnuPool);
+//let ntnuNyhetssakDao = new NyhetssakDao(ntnuPool);
 
 beforeAll(done => {
     runsqlfile("dao/createTable.sql", pool, () => {
