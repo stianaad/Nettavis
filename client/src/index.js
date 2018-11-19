@@ -8,6 +8,7 @@ import { HashRouter, Route, NavLink, Redirect,Switch } from 'react-router-dom';
 //import { Container, Row, Col } from 'react-grid-system';
 import ReactDOM from 'react-dom';
 import Popup from 'reactjs-popup';
+// $FlowFixMe
 var Base64 = require('js-base64').Base64;
 import axios from 'axios';
 import {
@@ -510,6 +511,7 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
           .then(kommentarer => {
             this.delt.kommentarer = kommentarer;
             this.alleKommentarer = kommentarer;
+            // $FlowFixMe
             document.getElementById("kommentarFelt").reset(); // feil her
             if(kommentarer.length>1){
               this.delt.antKommentarer="kommentarer";
