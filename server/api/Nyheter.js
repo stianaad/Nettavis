@@ -95,10 +95,10 @@ router.get("/kategorier", (req : Request, res: Response) => {
   })
 });
 
-router.get("/liveFeed/:nr",(req : Request, res: Response) => {
+router.get("/liveFeed",(req : Request, res: Response) => {
   console.log("/liveFeed/:nr fikk request fra klient");
   console.log(req.params.nr);
-  nyhetssakDao.getLiveFeed(req.params.nr, (status,data) => {
+  nyhetssakDao.getLiveFeed((status,data) => {
     res.status(status);
     res.json(data);
   })

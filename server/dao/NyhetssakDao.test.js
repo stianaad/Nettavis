@@ -6,22 +6,32 @@ const runsqlfile = require("./runsqlfile.js");
 // GitLab CI Pool
 var pool = mysql.createPool({
     connectionLimit: 1,
-    host: "mysql.stud.iie.ntnu.no",
-    user: "stianaad",
-    password: "at5lTFrZ",
-    database: "stianaad",
+    host: "mysql",
+    user: "root",
+    password: "root",
+    database: "School",
     debug: false,
     multipleStatements: true
 });
+/*
+var ntnuPool = mysql.createPool({
+  connectionLimit: 1,
+  host: "mysql.stud.iie.ntnu.no",
+  user: "stianaad",
+  password: "at5lTFrZ",
+  database: "stianaad",
+  debug: false,
+  multipleStatements: true
+});*/
 
 let nyhetssakDao = new NyhetssakDao(pool);
 
-/*
+
 beforeAll(done => {
     runsqlfile("dao/createTable.sql", pool, () => {
         runsqlfile("dao/createTestdata.sql",pool,done);
     });
-});*/
+});
 
 afterAll(() => {
     pool.end();
@@ -33,11 +43,10 @@ test("Få ein sak med id frå db", done => {
             "Test callback: status " + status + ", data= "+ JSON.stringify(data)
         );
         expect(data.length).toBe(1);
-        expect(data[0].overskrift).toBe("Norge vant");
+        expect(data[0].overskrift).toBe("FIFA er korrupt");
         done();
     }
-
-    nyhetssakDao.getsakID(1, callback);
+    nyhetssakDao.getsakID(3, callback);
 });
 
 test("Opprett ein nyhetssak", done => {

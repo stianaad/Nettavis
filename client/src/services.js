@@ -2,7 +2,7 @@
 import axios from 'axios';
 axios.interceptors.response.use(response => response.data);
 
-class Sak {
+export class Sak {
   sakID: number;
   overskrift: string;
   bildelink: string;
@@ -13,7 +13,7 @@ class Sak {
   viktighet: number;
 }
 
-class OpprettSak {
+export class OpprettSak {
   overskrift: string;
   bildelink: string;
   innhold: string;
@@ -28,7 +28,7 @@ class Kommentarer{
   tidspunkt: string;
   antallLikesKommentar: number;
 }
-class OpprettKommentarer{
+export class OpprettKommentarer{
   kommentarNavn: string;
   innhold: string;
   nyhetssakID: number;
@@ -36,6 +36,11 @@ class OpprettKommentarer{
 
 class Kategorier{
   navn: string;
+}
+
+class Test {
+  id: number;
+  innhold: string;
 }
 
 class SakService {
@@ -79,8 +84,8 @@ class SakService {
     return axios.put('/nyheter/likes/'+sakID+'/'+kommentarID,{antallLikesKommentar: likes});
   }
 
-  oppdaterNyhetssak(sakID: number,opprettSak: OpprettSak): Promise<void>{
-    return axios.put('/registrer/'+sakID,opprettSak);
+  oppdaterNyhetssak(sakID: number,sak: Sak): Promise<void>{
+    return axios.put('/registrer/'+sakID,sak);
   }
 
   slettNyhetssak(sakID: number):Promise<void>{
@@ -95,8 +100,12 @@ class SakService {
     return axios.get('/registrer/filtrer/'+kategori+'/'+sokeOrd);
   }
 
-  getLiveFeed(nr: number): Promise<Sak[]>{
-    return axios.get('/nyheter/liveFeed/'+nr);
+  getLiveFeed(): Promise<Sak[]>{
+    return axios.get('/nyheter/liveFeed/');
+  }
+
+  getHtml(): Promise<Test[]>{
+    return axios.get("/registrer/html/get");
   }
 }
 

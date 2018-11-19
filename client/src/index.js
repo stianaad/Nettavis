@@ -8,9 +8,23 @@ import { HashRouter, Route, NavLink, Redirect,Switch } from 'react-router-dom';
 //import { Container, Row, Col } from 'react-grid-system';
 import ReactDOM from 'react-dom';
 import Popup from 'reactjs-popup';
+var Base64 = require('js-base64').Base64;
 import axios from 'axios';
-import { Alert, KategoriVisning, ListGroup, NavBar, Visning, Oppsett,Input,Row,Column,ContainerFluid, Overskrift, ListGroupInline, CheckBox } from './widgets';
-import { sakService,kategoriService} from './services';
+import {
+  Alert,
+  ListGroup,
+  NavBar,
+  Oppsett,
+  Input,
+  Row,
+  Column,
+  ContainerFluid,
+  Overskrift,
+  ListGroupInline,
+  CheckBox,
+  Card
+} from './widgets';
+import { sakService,kategoriService, Sak, OpprettSak, OpprettKommentarer} from './services';
 
 import createHashHistory from 'history/createHashHistory';
 const history = createHashHistory(); // Use history.push(...) to programmatically change path, for instance after successfully saving a student
@@ -64,45 +78,33 @@ class Redirection extends Component{
 
 class LiveFeed extends Component{
   nyesteSaker = [];
-  start = 3;
   interval=null;
 
   render() {
     return(
-      <ContainerFluid>
-        <Row>
-          <marquee>
-            <ListGroupInline>
-          {this.nyesteSaker.map(sak =>(
-            <ListGroupInline.Item nokkel={sak.sakID} to={"/nyheter/"+sak.kategoriNavn+"/"+sak.sakID}>
-              {sak.overskrift}<br></br>
-              {sak.tidspunkt}
-            </ListGroupInline.Item>
-          ))}
-            </ListGroupInline>
-          </marquee>
-        </Row>
-      </ContainerFluid>
+      <marquee style={{background: "grey"}}>
+        <ListGroupInline>
+      {this.nyesteSaker.map(sak =>(
+        <ListGroupInline.Item key={sak.sakID} style={{color: "white"}} to={"/nyheter/"+sak.kategoriNavn+"/"+sak.sakID}>
+          {sak.overskrift} {'   '}{sak.tidspunkt}
+        </ListGroupInline.Item>
+      ))}
+        </ListGroupInline>
+      </marquee>
     )
   }
 
   mounted() {
     sakService
-      .getLiveFeed(this.start)
+      .getLiveFeed()
       .then(sak => (this.nyesteSaker = sak))
       .catch((error: Error) => Alert.danger(error.message));
 
-    /*<ListGroup.Item key={sak.sakID} to={"/nyheter/"+sak.kategoriNavn+"/"+sak.sakID}>*/
-
     this.interval = setInterval(() => {
       sakService
-        .getLiveFeed(this.start)
+        .getLiveFeed()
         .then(sak => (this.nyesteSaker = sak))
         .catch((error: Error) => Alert.danger(error.message));
-      this.start = this.start-1;
-      if(this.start == 0){
-        this.start= 3;
-      }
     },10000);
   }
 
@@ -117,48 +119,45 @@ class LiveFeed extends Component{
 class FramsideVisning extends Component{
   alleNyheter = [];
   delt = {nyheter: []};
-  antallSakerPrSide = 9;
-
+  antallSakerPrSide = 3;
+  sideNr = 1;
+  antallSider = 1;
   sakNrStart = 0;
   sakNrSlutt = this.antallSakerPrSide;
 
   render() {
     return (
       <div >
-        <br></br>
         <LiveFeed/>
+        <br></br>
         <br></br>
         <Oppsett midtBredde={10} sideBredde={1} >
           <ContainerFluid>
             <Row  styles={{ margin: 'auto', justifyContent: 'center', alignItems: 'flex-start'}}>
               <div className={"card-columns"}>
               {this.delt.nyheter.map(e => (
-                  <div className={"card"}>
-                  <NavLink key={e.sakID} to={'nyheter/'+e.kategoriNavn+'/'+e.sakID}>
-                    <img src={e.bildelink} className={"card-img-top img-fluid"}/>
-                    <div className={"card-body"}>
-                      <h5 className={"card-title text-center"}>{e.overskrift}</h5>
-                    </div>
-                  </NavLink>
-                  </div>
+                  <Card key={e.sakID} to={'nyheter/'+e.kategoriNavn+'/'+e.sakID} link={e.bildelink} title={e.overskrift}/>
               ))}
               </div>
             </Row>
           </ContainerFluid>
           <br></br>
           <footer>
-            {(this.sakNrStart>0) ? (
-              <button type="button" className="float-left" onClick={this.forrigeSide}>
-              <span><img src={"http://pluspng.com/img-png/arrow-png-no-background-download-this-image-as-600.png"} width="40" height="40"/></span>
-            </button>) : (
-              null
+            <div className={"text-center"}>
+              {(this.sakNrStart>0) ? (
+                <button type="button" style={{padding: 0, border: "none", backgroundColor: "white"}} className="mr-4" onClick={this.forrigeSide} >
+                  <span><img src={"http://pluspng.com/img-png/arrow-png-no-background-download-this-image-as-600.png"} width="20" height="20"/></span>
+                </button>) : (
+                null
               )}
-            {(this.sakNrSlutt<this.alleNyheter.length) ? (
-              <button type="button" className="float-right" onClick={this.nesteSide}>
-                <span><img src="https://www.clipartmax.com/png/middle/2-21171_free-arrow-clipart-no-background-transparent-arrow-right-arrow-transparent-background.png" width="40" height="40"/></span>
-            </button>) : (
-              null
-            )}
+              Side {this.sideNr} av {this.antallSider}
+              {(this.sakNrSlutt<this.alleNyheter.length) ? (
+                <button type="button" style={{padding: 0, border: "none", backgroundColor: "white"}} className=" ml-4" onClick={this.nesteSide}>
+                  <span><img src="https://www.freeiconspng.com/uploads/white-arrow-transparent-png-27.png" width="20" height="20"/></span>
+                </button>) : (
+                null
+              )}
+            </div>
           </footer>
         </Oppsett>
       </div>
@@ -166,8 +165,9 @@ class FramsideVisning extends Component{
   }
 
   nesteSide(){
-    this.sakNrStart=this.sakNrStart+this.antallSakerPrSide;
-    this.sakNrSlutt = this.sakNrSlutt + this.antallSakerPrSide;
+    this.sakNrStart+=this.antallSakerPrSide;
+    this.sideNr ++;
+    this.sakNrSlutt += this.antallSakerPrSide;
     if(this.sakNrSlutt>this.alleNyheter.length){
       this.sakNrSlutt = this.alleNyheter.length;
     }
@@ -176,15 +176,16 @@ class FramsideVisning extends Component{
 
   forrigeSide(){
     console.log(this.sakNrSlutt);
-    this.sakNrStart = this.sakNrStart - this.antallSakerPrSide;
+    this.sideNr--;
+    this.sakNrStart-=this.antallSakerPrSide;
     if(this.sakNrSlutt === this.alleNyheter.length){
-      this.sakNrSlutt = this.sakNrSlutt - (this.sakNrSlutt%this.antallSakerPrSide);
-      console.log(this.sakNrSlutt);
-      console.log(this.sakNrStart);
+      this.sakNrSlutt-= ((this.sakNrSlutt%this.antallSakerPrSide===0) ? (this.antallSakerPrSide) : (this.sakNrSlutt%this.antallSakerPrSide));
+      console.log("sakNrSlutt;"+ this.sakNrSlutt);
+      console.log("sakNrStart;"+this.sakNrStart);
     } else {
-      this.sakNrSlutt = this.sakNrSlutt - this.antallSakerPrSide;
-      console.log(this.sakNrStart);
-      console.log(this.sakNrSlutt);
+      this.sakNrSlutt-= this.antallSakerPrSide;
+      console.log("sakNrSlutt;"+this.sakNrStart);
+      console.log("sakNrStart;"+this.sakNrSlutt);
     }
     this.delt.nyheter = this.alleNyheter.slice(this.sakNrStart,this.sakNrSlutt);
   }
@@ -194,7 +195,8 @@ class FramsideVisning extends Component{
       .getNyheter()
       .then(nyheter => {
         this.alleNyheter = nyheter;
-        this.delt.nyheter = this.alleNyheter.slice(0,this.antallSakerPrSide);
+        this.delt.nyheter = this.alleNyheter.slice(this.sakNrStart,this.antallSakerPrSide);
+        this.antallSider = Math.ceil((this.alleNyheter.length)/(this.antallSakerPrSide));
       })
       .catch((error: Error) => Alert.danger(error.message));
   }
@@ -205,6 +207,8 @@ class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
   delt = {kategori: []};
 
   antallSakerPrSide = 3;
+  sideNr = 1;
+  antallSider = 1;
 
   sakNrStart = 0;
   sakNrSlutt = this.antallSakerPrSide;
@@ -220,32 +224,28 @@ class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
             <Row  styles={{maxWidth: 1200, margin: 'auto', justifyContent: 'center', alignItems: 'flex-start'}}>
               <div className={"card-columns"}>
                 {this.delt.kategori.map(e => (
-                  <div className={"card"}>
-                    <NavLink key={e.sakID} exact to={'/nyheter/'+e.kategoriNavn+'/'+e.sakID}>
-                      <img src={e.bildelink} className={"card-img-top img-fluid"}/>
-                      <div className={"card-body"}>
-                        <h5 className={"card-title text-center"}>{e.overskrift}</h5>
-                      </div>
-                    </NavLink>
-                  </div>
+                  <Card key={e.sakID} exact={true} to={'/nyheter/'+e.kategoriNavn+'/'+e.sakID} link={e.bildelink} title={e.overskrift}/>
                 ))}
               </div>
             </Row>
           </ContainerFluid>
           <br></br>
           <footer>
-            {(this.sakNrStart>0) ? (
-              <button type="button" className="float-left" onClick={this.forrigeSide}>
-                forrige side
-              </button>) : (
-              null
-            )}
-            {(this.sakNrSlutt<this.alleNyhetssakerGittKategori.length) ? (
-              <button type="button" className="float-right" onClick={this.nesteSide}>
-                neste side <span><img src="https://banner2.kisspng.com/20180407/ayq/kisspng-triangle-monochrome-black-and-white-right-arrow-5ac977e966cfc2.8899314915231528734211.jpg" width="40" height="40"/></span>
-              </button>) : (
-              null
-            )}
+            <div className={"text-center"}>
+              {(this.sakNrStart>0) ? (
+                <button type="button" style={{padding: 0, border: "none", backgroundColor: "white"}} className="mr-4" onClick={this.forrigeSide} >
+                  <span><img src={"http://pluspng.com/img-png/arrow-png-no-background-download-this-image-as-600.png"} width="20" height="20"/></span>
+                </button>) : (
+                null
+              )}
+              Side {this.sideNr} av {this.antallSider}
+              {(this.sakNrSlutt<this.alleNyhetssakerGittKategori.length) ? (
+                <button type="button" style={{padding: 0, border: "none", backgroundColor: "white"}} className=" ml-4" onClick={this.nesteSide}>
+                  <span><img src="https://www.freeiconspng.com/uploads/white-arrow-transparent-png-27.png" width="20" height="20"/></span>
+                </button>) : (
+                null
+              )}
+            </div>
           </footer>
         </Oppsett>
       </div>
@@ -253,7 +253,8 @@ class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
   }
 
   nesteSide(){
-    this.sakNrStart=this.sakNrStart+this.antallSakerPrSide;
+    this.sakNrStart+=this.antallSakerPrSide;
+    this.sideNr++;
     this.sakNrSlutt = this.sakNrSlutt + this.antallSakerPrSide;
     if(this.sakNrSlutt>this.alleNyhetssakerGittKategori.length){
       this.sakNrSlutt = this.alleNyhetssakerGittKategori.length;
@@ -263,15 +264,16 @@ class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
 
   forrigeSide(){
     console.log(this.sakNrSlutt);
-    this.sakNrStart = this.sakNrStart - this.antallSakerPrSide;
+    this.sideNr--;
+    this.sakNrStart-=this.antallSakerPrSide;
     if(this.sakNrSlutt === this.alleNyhetssakerGittKategori.length){
-      this.sakNrSlutt = this.sakNrSlutt - (this.sakNrSlutt%this.antallSakerPrSide);
-      console.log(this.sakNrSlutt);
-      console.log(this.sakNrStart);
+      this.sakNrSlutt = this.sakNrSlutt - ((this.sakNrSlutt%this.antallSakerPrSide===0) ? (this.antallSakerPrSide) : (this.sakNrSlutt%this.antallSakerPrSide));
+      console.log("sakNrSlutt, if: ",this.sakNrSlutt);
+      console.log("sakNrStart, if: ",this.sakNrStart);
     } else {
       this.sakNrSlutt = this.sakNrSlutt - this.antallSakerPrSide;
-      console.log(this.sakNrStart);
-      console.log(this.sakNrSlutt);
+      console.log("sakNrSlutt, else: ",this.sakNrStart);
+      console.log("sakNrStart, else: ",this.sakNrSlutt);
     }
     this.delt.kategori = this.alleNyhetssakerGittKategori.slice(this.sakNrStart,this.sakNrSlutt);
   }
@@ -280,15 +282,20 @@ class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
     sakService
       .getNyhetssakerGittKategori(this.props.match.params.kategorinavn)
       .then(kat => {
-        this.delt.kategori = kat.slice(this.sakNrStart,this.sakNrSlutt);
+        this.delt.kategori = kat.slice(0,this.antallSakerPrSide);
         this.alleNyhetssakerGittKategori = kat;
+        this.sakNrStart = 0;
+        this.sakNrSlutt = this.antallSakerPrSide;
+        this.sideNr = 1;
+        this.antallSider = Math.ceil((this.alleNyhetssakerGittKategori.length)/(this.antallSakerPrSide));
       })
       .catch((error: Error) => Alert.danger(error.message));
   }
 }
 
 class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
-  delt ={kommentarer: [],antKommentarer: "kommentar", sak: {
+  delt ={kommentarer: [],antKommentarer: "kommentar",
+    sak: {
       sakID: this.props.match.params.sakID,
       overskrift: "",
       bildelink: "",
@@ -300,16 +307,13 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
     }};
 
   antKommentarerLastetInn = 5;
+
   alleKommentarer = [];
   aktivDropDownList = true;
 
-  kommentar = {
-    kommentarNavn: '',
-    innhold: '',
-    nyhetssakID: this.props.match.params.sakID
-  };
+  kommentar = new OpprettKommentarer();
 
-  buttonColor = "btn btn-default btn-sm";
+  buttonColor = "btn btn-default btn-sm ml-2";
   sorteringsRekkefolge= "desc";
   sorterEtterKolonne="kommentarID";
 
@@ -324,10 +328,10 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
             <div className="text-center">
             <Overskrift>{this.delt.sak.overskrift}</Overskrift>
             <br></br>
-            <img src={this.delt.sak.bildelink} className="mx-auto d-block img-fluid w-50 card-img-top" />
+            <img src={this.delt.sak.bildelink} className="mx-auto d-block img-fluid mh-25 card-img-top" />
             <p><i>Nyhetsartikkelen ble opprettet {this.delt.sak.tidspunkt}</i></p>
               <div>
-                <p>Denne artikkelen har {this.delt.sak.antallLikes} likes {'  '}
+                <p>Denne artikkelen har {this.delt.sak.antallLikes} {(this.delt.sak.antallLikes === 1) ? ("like") : ("likes")} {'  '}
                 <button type="button" className={this.buttonColor} onClick={this.skiftFarge}>
                   <span><img src="https://cdn3.iconfinder.com/data/icons/social-productivity-black-line-2/1/37-512.png" width="40" height="40"/></span> Like
                 </button>
@@ -336,11 +340,8 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
               <br></br>
             </div>
           <Oppsett sideBredde={1} midtBredde={10}>
-            <div className={"card-body"}>{this.delt.sak.innhold} printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMake
-              printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently <br></br> with desktop publishing software like Aldus PageMake
-              printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMake
-              printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMake</div>
-          </Oppsett>
+              <div dangerouslySetInnerHTML={{__html: Base64.decode(this.delt.sak.innhold)}}></div>
+             </Oppsett>
         </div>
           <br></br>
           <br></br>
@@ -433,7 +434,8 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
           sakService.getKommentarerGittSak(this.props.match.params.sakID, this.sorterEtterKolonne, this.sorteringsRekkefolge)
             .then(kommentarer => (this.delt.kommentarer = kommentarer))
             .catch((error: Error) => Alert.danger(error.message));
-        }).catch((error: Error) => Alert.danger(error.message));
+        })
+        .catch((error: Error) => Alert.danger(error.message));
     }
   }
 
@@ -470,13 +472,13 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
   }
 
   skiftFarge(){
-    if(this.buttonColor === "btn btn-default btn-sm"){
+    if(this.buttonColor === "btn btn-default btn-sm ml-2"){
       if(this.delt.sak.antallLikes === null){
         this.delt.sak.antallLikes = 0;
       }
       sakService.oppdaterLikes(this.props.match.params.sakID,(this.delt.sak.antallLikes+1))
         .then(() => {
-          this.buttonColor = "btn btn-success btn-sm";
+          this.buttonColor = "btn btn-success btn-sm ml-2";
           sakService
             .getSakID(this.props.match.params.sakID)
             .then(sak => (this.delt.sak = sak[0]))
@@ -486,7 +488,7 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
     } else {
       sakService.oppdaterLikes(this.props.match.params.sakID,(this.delt.sak.antallLikes-1))
         .then(() => {
-          this.buttonColor = "btn btn-default btn-sm";
+          this.buttonColor = "btn btn-default btn-sm ml-2";
           sakService
             .getSakID(this.props.match.params.sakID)
             .then(sak => (this.delt.sak = sak[0]))
@@ -498,8 +500,9 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
   }
 
   leggTilKommentar(){
+    this.kommentar.nyhetssakID = this.props.match.params.sakID;
     sakService
-      .leggTilKommentar(this.kommentar) // får feil her
+      .leggTilKommentar(this.kommentar)
       .then(() => {
         this.aktivDropDownList = false;
         sakService
@@ -582,7 +585,7 @@ class EndreNyhetssaker extends Component{
         sakService
           .filtrerNyhetssaker(this.sok.innhold)
           .then(sak => (this.delt.nyhetssaker = sak))
-          .catch((error: Error) => Alert.danger(error.message));
+          .catch();
       }
     } else {
       if(this.checkBox.kultur.disable ||
@@ -593,7 +596,7 @@ class EndreNyhetssaker extends Component{
         sakService
           .getAlleNyhetssaker()
           .then(nyeste => (this.delt.nyhetssaker = nyeste))
-          .catch((error: Error) => Alert.danger(error.message));
+          .catch();
       }
     }
   }
@@ -610,9 +613,9 @@ class EndreNyhetssaker extends Component{
           <CheckBox checkBoxNavn={"Tech"} disable={this.checkBox.tech.disable} forandring={() => this.checkTech()}/>
         </div>
         <br></br>
-        <form>
           <Input tittelInput="Søk">
             <input
+              className={"form-control mr-5"}
               type="text"
               placeholder="Søk etter nyhetssak"
               onChange = {this.handterInput}
@@ -621,7 +624,6 @@ class EndreNyhetssaker extends Component{
               <button className="float-right btn btn-info" >Legg til ny sak</button>
             </NavLink>
           </Input>
-        </form>
         <ul className="list-group ">
           {this.delt.nyhetssaker.map(sak => (
             <ListGroup.Item key={sak.sakID}>
@@ -688,16 +690,12 @@ class EndreNyhetssaker extends Component{
     }
   }
 
-  filtrerKategorier(kategoriNavn1: string,kategoriNavn2: string){
-      this.delt.nyhetssaker = this.delt.nyhetssaker.filter(nyhet => ((nyhet.kategoriNavn=== kategoriNavn1) || (nyhet.kategoriNavn=== kategoriNavn2)));
-  }
-
   slett(sakID) {
     console.log(sakID);
     sakService
       .slettNyhetssak(sakID)
       .catch((error: Error) => Alert.danger(error.message));
-    window.location.reload();
+    this.mounted();
   }
 
 
@@ -713,16 +711,8 @@ class EndreNyhetssaker extends Component{
 }
 
 class OppdaterNyhetssak extends Component<{match: { params: {sakID: number}}}>{
-  sak = {
-    sakID: this.props.match.params.sakID,
-    overskrift: "",
-    bildelink: "",
-    innhold: "",
-    tidspunkt: "",
-    antallLikes: 0,
-    kategoriNavn: "",
-    viktighet: 0
-  };
+
+  sak = new Sak();
 
   form = null;
 
@@ -795,7 +785,7 @@ class OppdaterNyhetssak extends Component<{match: { params: {sakID: number}}}>{
             </div>
             <br></br>
             <div className="form-group">
-            <textarea className="form-control" placeholder="Innhold..." rows="3"  id="comment" name="text"
+            <textarea className="form-control" placeholder="Innhold..." rows="6"  id="comment" name="text"
                       value={this.sak.innhold}
                       onChange={(event: SyntheticInputEvent<HTMLInputElement>) => {this.sak.innhold = event.target.value;}}
             />
@@ -820,15 +810,22 @@ class OppdaterNyhetssak extends Component<{match: { params: {sakID: number}}}>{
       viktighet: this.sak.viktighet
     };
      console.log(oppdaterSak);
-    /*sakService
-      .oppdaterNyhetssak(this.props.match.params.sakID,oppdaterSak)
-      .catch((error: Error) => Alert.danger(error.message))*/
+    sakService
+      .oppdaterNyhetssak(this.props.match.params.sakID,this.sak)
+      .then(() => {
+        history.push("/nyheter/"+this.sak.kategoriNavn+"/"+this.sak.sakID);
+        Alert.success("Du har oppdatert "+this.sak.overskrift);
+      })
+      .catch((error: Error) => Alert.danger(error.message));
   }
 
   mounted(){
     sakService
       .getSakID(this.props.match.params.sakID)
-      .then(nyhet => (this.sak = nyhet[0]))
+      .then(nyhet => {
+        this.sak = nyhet[0];
+        this.sak.innhold = Base64.decode(this.sak.innhold);
+      })
       .catch((error: Error) => Alert.danger(error.message));
 
     kategoriService
@@ -846,13 +843,7 @@ class RegistrerNyhetssak extends Component{
   kategori = "";
   form = null;
 
-  opprettSak =  {
-    overskrift: '',
-    bildelink: '',
-    innhold: '',
-    kategoriNavn: '',
-    viktighet: this.viktighet
-  };
+  opprettSak = new OpprettSak();
   render(){
     return(
       <Oppsett midtBredde={8} sideBredde={2}>
@@ -905,7 +896,7 @@ class RegistrerNyhetssak extends Component{
           </ContainerFluid>
           <br></br>
           <div className="form-group">
-            <textarea className="form-control" placeholder="Innhold..." rows="3"  id="comment" name="text"
+            <textarea className="form-control" placeholder="Innhold..." rows="6"  id="comment" name="text"
                       required={true}
                       onChange={(event: SyntheticInputEvent<HTMLInputElement>) => {this.opprettSak.innhold = event.target.value;}}
             />
@@ -925,7 +916,7 @@ class RegistrerNyhetssak extends Component{
       return Alert.danger("Vennligst fyll ut de tomme feltene");
     }
     sakService
-      .opprettNyhetssak(this.opprettSak) // feil her
+      .opprettNyhetssak(this.opprettSak)
       .then(() => {Alert.success("Du har registrert en ny sak!")})
       .catch((error: Error) => Alert.danger(error.message));
     history.push('/nyheter/'+this.opprettSak.kategoriNavn);

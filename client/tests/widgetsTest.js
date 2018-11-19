@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Component } from 'react-simplified';
 import { Alert,Overskrift } from '../src/widgets.js';
 import { shallow, mount } from 'enzyme';
-import { Column, ContainerFluid, Row, ListGroup, ListGroupInline,Oppsett,Input} from '../src/widgets';
+import { Column, ContainerFluid, Row, ListGroup, ListGroupInline, Oppsett, Input, NavBar } from '../src/widgets';
 
 describe('Alert tests', () => {
   const wrapper = shallow(<Alert />);
@@ -26,7 +26,6 @@ describe('Alert tests', () => {
       if (instance) expect(instance.alerts).toEqual([{ text: 'test', type: 'danger' }]);
 
       expect(wrapper.find('button.close')).toHaveLength(1);
-
       done();
     });
   });
@@ -126,14 +125,20 @@ describe('Column tests', () => {
 describe('ListGroup tests', () => {
   const wrapper = shallow(
     <ListGroup>
-      <li>
+      <ListGroup.Item>
         <p>Test</p>
-      </li>
+      </ListGroup.Item>
     </ListGroup>
   );
 
-  it('sjekker parent til li for å sjå at den inneholder klassen list-group', () => {
-    expect(wrapper.find('li').parent().hasClass("list-group")).toEqual(true);
+  it('sjekker at den matcher med oppsette i  widgets', () => {
+    expect(wrapper.matchesElement(
+      <ul className={"list-group"}>
+        <ListGroup.Item>
+          <p>Test</p>
+        </ListGroup.Item>
+      </ul>
+    )).toEqual(true);
   });
 
   it('Sjekke Listgroup sine children', () => {
@@ -160,14 +165,20 @@ describe('ListGroupItem tests', () => {
 describe('ListGroupInline tests', () => {
   const wrapper = shallow(
     <ListGroupInline>
-      <li nokkel={1} to={"/test"}>
+      <ListGroupInline.Item nokkel={1} to={"/test"}>
         <p>Test</p>
-      </li>
+      </ListGroupInline.Item>
     </ListGroupInline>
   );
 
-  it('sjekker parent til li for å sjå at den inneholder klassen list-inline', () => {
-    expect(wrapper.find('li').parent().hasClass("list-inline")).toEqual(true);
+  it('sjekker at den matcher med oppsette i widgets', () => {
+    expect(wrapper.matchesElement(
+      <ul className={"list-inline"}>
+        <ListGroupInline.Item>
+          <p>Test</p>
+        </ListGroupInline.Item>
+      </ul>
+    )).toEqual(true);
   });
 
   it('Sjekke ListgroupInline sine children', () => {
@@ -177,9 +188,9 @@ describe('ListGroupInline tests', () => {
 
 describe('ListGroupItemInline tests', () => {
   const wrapper = shallow(
-    <ListGroupInlInline.Item>
+    <ListGroupInline.Item nokkel={1} to={"/test"}>
       <p>Test</p>
-    </ListGroupInlInline.Item>
+    </ListGroupInline.Item>
   );
 
   it('sjekker parent til p for å sjå at den inneholder klassen list-inline-item mr-5 ml-5', () => {
@@ -187,7 +198,7 @@ describe('ListGroupItemInline tests', () => {
   });
 
   it('Sjekke ListgroupItem sine children', () => {
-    expect(wrapper.find('li').children()).toHaveLength(1);
+    expect(wrapper.find('NavLink').children()).toHaveLength(1);
   });
 }); // funke
 
@@ -256,6 +267,24 @@ describe('Input tests', () => {
       <input type="text"
              placeholder="Ola Nordmann"/>
     </Input>
+  );
+
+  it('Sjekker at Input har de rette klassane', () => {
+    expect(wrapper.find('input').parent().hasClass('input-group mb-3')).toEqual(true);
+  });
+
+  it('Sjekker chidren til Input', () => {
+    expect(wrapper.find('div').children()).toHaveLength(3);
+  });
+});
+
+describe('Navbar tests', () => {
+  const wrapper = shallow(
+   <NavBar>
+     <NavBar.Brand> Brand </NavBar.Brand>
+     <NavBar.Left> venstre </NavBar.Left>
+     <NavBar.Right> hoyre </NavBar.Right>
+   </NavBar.Brand>
   );
 
   it('Sjekker at Input har de rette klassane', () => {

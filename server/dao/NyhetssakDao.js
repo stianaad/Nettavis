@@ -72,7 +72,7 @@ module.exports = class NyhetssakDao extends Dao {
       let sak = [json.overskrift, json.innhold, json.bildelink,json.viktighet, json.kategoriNavn];
       console.log("sak", sak);
       super.query(
-          "INSERT INTO nyhetssak VALUES(DEFAULT,?,DEFAULT,?,?,?,0,?,null)",
+          "INSERT INTO nyhetssak VALUES(DEFAULT,?,DEFAULT,?,?,?,0,?)",
           sak,
           callback
       );
@@ -132,7 +132,7 @@ module.exports = class NyhetssakDao extends Dao {
     )
   }
 
-  getLiveFeed(nr: number, callback: (status: string, data: string) => void){
+  getLiveFeed(callback: (status: string, data: string) => void){
     super.query(
       `SELECT sakID,overskrift,kategoriNavn, DATE_FORMAT(tidspunkt, '%Y-%m-%d %H:%i') AS tidspunkt FROM nyhetssak ORDER BY tidspunkt DESC LIMIT 0,5`,
       [],
@@ -140,11 +140,19 @@ module.exports = class NyhetssakDao extends Dao {
     )
   }
 
-  leggTilHtml(tekst: string, callback: (status: string, data: string) => void){
+  leggTilHtml(innhold: string, callback: (status: string, data: string) => void){
     super.query(
-      "INSERT INTO nyhetssak VALUES(DEFAULT,1,DEFAULT,?,1,1,0,1,null)",
-      [tekst],
+      "INSERT INTO test VALUES(DEFAULT,?)",
+      [innhold],
       callback
     );
+  }
+
+  getHtml(callback: (status: string, data: string) => void){
+    super.query(
+      "SELECT * FROM test WHERE id = 3",
+      [],
+      callback
+    )
   }
 };

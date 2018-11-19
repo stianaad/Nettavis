@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 var mysql = require("mysql");
 var bodyParser = require("body-parser");
-//var atob = require('atob');
-//var btoa = require('btoa');
+var Base64 = require('js-base64').Base64;
 
 type Request = express$Request;
 type Response = express$Response;
@@ -40,6 +39,7 @@ router.get("/filtrer/:kategoriNavn/:sokeOrd",(req : Request, res: Response) => {
 
 router.post("/", (req: Request,res: Response) => {
     console.log("Fikk POST-request fra kleinten");
+    req.body.innhold = Base64.encode(req.body.innhold);
     nyhetssakDao.opprettNyhetssak(req.body, (status, data) => {
         res.status(status);
         res.json(data);
@@ -48,6 +48,7 @@ router.post("/", (req: Request,res: Response) => {
 
 router.put("/:sakID", (req: Request,res: Response) => {
     console.log("Fikk put request fra klienten");
+    req.body.innhold = Base64.encode(req.body.innhold);
     nyhetssakDao.oppdaterNyhetssak(req.body, req.params.sakID, (status, data) => {
         res.status(status);
         res.json(data);
@@ -69,34 +70,25 @@ router.get("/filtrer/:sok", (req: Request,res: Response) => { //bruke dette til 
     res.json(data);
   });
 });
-/*
-function b64EncodeUnicode(str) {
-  // first we use encodeURIComponent to get percent-encoded UTF-8,
-  // then we convert the percent encodings into raw bytes which
-  // can be fed into btoa.
-  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-    function toSolidBytes(match, p1) {
-      return String.fromCharCode('0x' + p1);
-    }));
-}
 
-function b64DecodeUnicode(str) {
-  // Going backwards: from bytestream, to percent-encoding, to original string.
-  return decodeURIComponent(atob(str).split('').map(function(c) {
-    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-}*/
-/*
+
 router.post("/test/html", (req: Request,res: Response) => {
+  console.log("/test/html fekk request");
   console.log("Fikk POST-request fra kleinten");
-  var bin = "Hello";
-  var b64 = btoa(bin);
-  var hei = "SGVsbG8sIFdvcmxkIQ==";
-  var bin = atob(b64);
-  /*nyhetssakDao.leggTilHtml(tekst, (status, data) => {
+  let innhold = Base64.encode(req.body.innhold);  // ZGFua29nYWk=
+  console.log(innhold);  // dankogai
+  nyhetssakDao.leggTilHtml(innhold, (status, data) => {
     res.status(status);
     res.json(data);
-  });*/
-//});
+  });
+});
+
+router.get("/html/get", (req: Request,res: Response) => { //bruke dette til å søke på nyhetssaker,// og må filtrere ut dei nyhetssakene eg skal ha
+  console.log("/html/get fikk get request fra klienten");
+  nyhetssakDao.getHtml((status, data) => {// må ha på % for å kunne filtrere ut i mysql
+    res.status(status);
+    res.json(data);
+  });
+});
 
 module.exports = router;

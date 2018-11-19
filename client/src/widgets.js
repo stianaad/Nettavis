@@ -61,14 +61,17 @@ export class Alert extends Component {
 /**
  * Renders an information card using Bootstrap classes
  */
-export class Card extends Component<{ title: React.Node, children?: React.Node }> {
+export class Card extends Component<{ title: React.Node,exact?: boolean,link: string,to: string, children?: React.Node }> {
   render() {
     return (
       <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">{this.props.title}</h5>
-          <div className="card-text">{this.props.children}</div>
-        </div>
+        <NavLink style={{color: "black"}} exact={this.props.exact} to={this.props.to}>
+          <img src={this.props.link} className={"card-img-top img-fluid"}/>
+          <div className="card-body">
+            <h5 className="card-title text-center">{this.props.title}</h5>
+            <div className="card-text">{this.props.children}</div>
+          </div>
+        </NavLink>
       </div>
     );
   }
@@ -99,10 +102,10 @@ export class ListGroup extends Component<{
   }
 }
 
-class ListGroupItemInline extends Component<{ to: string, nokkel: number, children: React.Node }> {
+class ListGroupItemInline extends Component<{ to: string, style?: Object, children: React.Node }> {
   render() {
     return(
-      <NavLink className="list-inline-item mr-5 ml-5" key={this.props.nokkel} activeClassName="active" to={this.props.to}>
+      <NavLink className="list-inline-item mt-2 mr-5 ml-5" style={this.props.style} activeClassName="active" to={this.props.to}>
         {this.props.children}
       </NavLink>
     )
@@ -165,7 +168,7 @@ class NavBarBrand extends Component<{ children?: React.Node }> {
   render() {
     if (!this.props.children) return null;
     return (
-      <NavLink className="navbar-brand" style={{ fontSize: "40px"}} activeClassName="active" exact to="/nyheter">
+      <NavLink className="navbar-brand" style={{ font: "400 100px/1.5  Pacifico,Helvetica, sans-serif",textShadow: "3px 3px 0px rgba(0,0,0,0.1), 7px 7px 0px rgba(0,0,0,0.05)", fontSize: "40px"}} activeClassName="active" exact to="/nyheter">
         {this.props.children}
       </NavLink>
     );
@@ -220,79 +223,6 @@ export class NavBar extends Component<{ children: React.Element<typeof NavBarBra
           </ul>
         </div>
       </nav>
-    );
-  }
-}
-
-export class Visning extends Component<{array: Array<Sak>}>{
-
-  render() {
-    return (
-      <div>
-        <Oppsett midtBredde={8} sideBredde={2} >
-          <ContainerFluid>
-            <Row  styles={{maxWidth: 1200, margin: 'auto', justifyContent: 'center', alignItems: 'flex-start'}}>
-              {this.props.array.map(e => (
-                e.bildelink ? (
-                  <ListGroup.Item key={e.sakID} to={'nyheter/'+e.kategoriNavn+'/'+e.sakID}>
-                    <p><img src={e.bildelink} width="300" height="200"/></p>
-                    {e.overskrift}  {e.sakID}
-                  </ListGroup.Item>
-                ) : (
-                  <ListGroup.Item key={e.sakID} to={'nyheter/'+e.kategoriNavn+'/'+e.sakID}>
-                    {e.overskrift}
-                  </ListGroup.Item>
-                )
-              ))}
-            </Row>
-          </ContainerFluid>
-          <br></br>
-          <footer>
-            {(this.sideNr>0) ? (
-              <button type="button" className="float-left" onClick={this.forrigeSide}>
-                forrige side
-              </button>) : (
-              null
-            )}
-            {(this.delt.nyheter.length==3) ? (
-              <button type="button" className="float-right" onClick={this.nesteSide}>
-                neste side <span><img src="https://banner2.kisspng.com/20180407/ayq/kisspng-triangle-monochrome-black-and-white-right-arrow-5ac977e966cfc2.8899314915231528734211.jpg" width="40" height="40"/></span>
-              </button>) : (
-              null
-            )}
-          </footer>
-        </Oppsett>
-      </div>
-    );
-  }
-}
-
-export class KategoriVisning extends Component<{array: Array<Sak>}>{
-
-  render() {
-    return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-sm-1 col-md-2 col-lg-2 ">
-          </div>
-          <div className="col-sm-10 col-md-8 col-lg-8 text-center">
-            {this.props.array.map(e => (
-              e.bildelink ? (
-                <ListGroup.Item key={e.sakID} exact to={'/nyheter/'+e.kategoriNavn+'/'+e.sakID}>
-                  <p><img src={e.bildelink} width="300" height="200"/></p>
-                  {e.overskrift}  {e.sakID}
-                </ListGroup.Item>
-              ) : (
-                <ListGroup.Item key={e.sakID} exact to={'/nyheter/'+e.kategoriNavn+'/'+e.sakID}>
-                  {e.overskrift}
-                </ListGroup.Item>
-              )
-            ))}
-          </div>
-          <div className="col-sm-1 col-md-2 col-lg-2">
-          </div>
-        </div>
-      </div>
     );
   }
 }
