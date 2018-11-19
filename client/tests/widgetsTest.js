@@ -16,7 +16,7 @@ describe('Alert tests', () => {
 
     expect(wrapper.find('button.close')).toHaveLength(0);
   });
-  /* Dette er metodene som jeg klonet fra forelesning, men fungerte ikkje, lurer på om det var noe feil med det du laget?
+
   it('after danger', done => {
     Alert.danger('test');
 
@@ -37,7 +37,7 @@ describe('Alert tests', () => {
     expect(typeof instance).toEqual('object');
     if (instance) expect(instance.alerts).toEqual([]);
     expect(wrapper.find('button.close')).toHaveLength(0);
-  });*/
+  });
 });
 
 describe('Overskrift tests', () => {
