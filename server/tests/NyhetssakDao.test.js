@@ -1,9 +1,13 @@
+// @flow
 var mysql = require("mysql");
 
 const NyhetssakDao = require("../dao/NyhetssakDao.js");
 const runsqlfile = require("../dao/runsqlfile.js");
+const Dao = require("../dao/dao.js");
+
 
 // GitLab CI Pool
+
 var pool = mysql.createPool({
     connectionLimit: 1,
     host: "mysql",
@@ -14,7 +18,7 @@ var pool = mysql.createPool({
     multipleStatements: true
 });
 /*
-var ntnuPool = mysql.createPool({
+var pool = mysql.createPool({
   connectionLimit: 1,
   host: "mysql.stud.iie.ntnu.no",
   user: "stianaad",
@@ -23,6 +27,16 @@ var ntnuPool = mysql.createPool({
   debug: false,
   multipleStatements: true
 });*/
+
+var pool2 = mysql.createPool({
+  connectionLimit: 1,
+  host: "mysql.stud.iie.ntnu.no",
+  user: "stianaad",
+  password: "at5lTFrZgfgh",
+  database: "stianaad",
+  debug: false,
+  multipleStatements: true
+});
 
 let nyhetssakDao = new NyhetssakDao(pool);
 //let ntnuNyhetssakDao = new NyhetssakDao(ntnuPool);
@@ -268,6 +282,62 @@ test("Hent antall saker på en gitt kategori", done => {
   );
 });
 
+test("Filtrer på kategori og overskrift", done => {
+  function callback(status, data){
+    console.log(
+      "Test callback: status " + status + ", data= "+ JSON.stringify(data)
+    );
+    expect(data.length).toBe(1);
+    expect(data[0].overskrift).toBe("Norge leder");
+    done();
+  }
+
+  nyhetssakDao.filtrertPaaKategoriOgOverskrift("Sport","Norge",
+    callback
+  );
+});
+
+test("Oppdater likes på kommentar", done => {
+  function callback(status, data){
+    console.log(
+      "Test callback: status " + status + ", data= "+ JSON.stringify(data)
+    );
+    expect(data.affectedRows).toBeGreaterThanOrEqual(1);
+    done();
+  }
+
+  nyhetssakDao.oppdaterLikesKommentar({antallLikesKommentar: 4},1,
+    callback
+  );
+});
+
+
+let dao = new Dao(pool);
+let dao2 = new Dao(pool2);
+
+test("sql error", done => {
+  async function callback(status, data) {
+    console.log(
+      "Test callback: status=" + status + ", data=" + JSON.stringify(data)
+    );
+    await expect(status).toBe(500);
+    done();
+  }
+
+  dao.query("SELECT *", [], callback);
+});
+
+test("error connecting", done => {
+  async function callback(status, data) {
+    console.log(
+      "Test callback: status=" + status + ", data=" + JSON.stringify(data)
+    );
+    await expect(status).toBe(500);
+    done();
+  }
+
+  dao2.query("SELECT * FROM events", [], callback);
+});
 
 
 

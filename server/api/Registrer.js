@@ -71,24 +71,4 @@ router.get("/filtrer/:sok", (req: Request,res: Response) => { //bruke dette til 
   });
 });
 
-
-router.post("/test/html", (req: Request,res: Response) => {
-  console.log("/test/html fekk request");
-  console.log("Fikk POST-request fra kleinten");
-  let innhold = Base64.encode(req.body.innhold);  // ZGFua29nYWk=
-  console.log(innhold);  // dankogai
-  nyhetssakDao.leggTilHtml(innhold, (status, data) => {
-    res.status(status);
-    res.json(data);
-  });
-});
-
-router.get("/html/get", (req: Request,res: Response) => { //bruke dette til å søke på nyhetssaker,// og må filtrere ut dei nyhetssakene eg skal ha
-  console.log("/html/get fikk get request fra klienten");
-  nyhetssakDao.getHtml((status, data) => {// må ha på % for å kunne filtrere ut i mysql
-    res.status(status);
-    res.json(data);
-  });
-});
-
 module.exports = router;

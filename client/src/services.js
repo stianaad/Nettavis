@@ -38,11 +38,6 @@ class Kategorier{
   navn: string;
 }
 
-class Test {
-  id: number;
-  innhold: string;
-}
-
 class Antall{
   antall: number;
 }
@@ -116,9 +111,6 @@ class SakService {
     return axios.get('/nyheter/liveFeed/');
   }
 
-  getHtml(): Promise<Test[]>{
-    return axios.get("/registrer/html/get");
-  }
 }
 
 class KategoriService{

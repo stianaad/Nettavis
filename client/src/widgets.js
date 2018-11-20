@@ -4,7 +4,6 @@
 import * as React from 'react';
 import { Component } from 'react-simplified';
 import { NavLink } from 'react-router-dom';
-import {Sak} from './services';
 
 /**
  * Renders alert messages using Bootstrap classes.

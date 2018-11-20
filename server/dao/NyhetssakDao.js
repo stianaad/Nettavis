@@ -155,20 +155,4 @@ module.exports = class NyhetssakDao extends Dao {
       callback
     )
   }
-
-  leggTilHtml(innhold: string, callback: (status: string, data: string) => void){
-    super.query(
-      "INSERT INTO test VALUES(DEFAULT,?)",
-      [innhold],
-      callback
-    );
-  }
-
-  getHtml(callback: (status: string, data: string) => void){
-    super.query(
-      "SELECT * FROM test WHERE id = 3",
-      [],
-      callback
-    )
-  }
 };
