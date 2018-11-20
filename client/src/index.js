@@ -118,7 +118,6 @@ class LiveFeed extends Component{
 }
 
 class FramsideVisning extends Component{
-  alleNyheter = [];
   delt = {nyheter: []};
   antallSakerPrSide = 3;
   sideNr = 1;
@@ -186,7 +185,6 @@ class FramsideVisning extends Component{
         this.delt.nyheter=nyheter;
       })
       .catch((error: Error) => Alert.danger(error.message));
-
   }
 
   mounted(){
@@ -209,14 +207,13 @@ class FramsideVisning extends Component{
 }
 
 class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
-  alleNyhetssakerGittKategori = [];
   delt = {kategori: []};
-
   antallSakerPrSide = 3;
   sideNr = 1;
   antallSider = 1;
   antallSaker = 0;
   sakNrStart = 0;
+
   render() {
     return (
       <div>
@@ -313,9 +310,7 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
       kategoriNavn: "",
       viktighet: 1
     }};
-
   antKommentarerLastetInn = 5;
-
   alleKommentarer = [];
   aktivDropDownList = true;
 
@@ -359,7 +354,7 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
                 {(this.alleKommentarer.length>0) ? (this.alleKommentarer.length) : ('')} {this.delt.antKommentarer}
                 <select
                   onChange={this.sorter}
-                  className="form-control float-right "
+                  className="form-control float-right"
                   disabled={this.aktivDropDownList}
                   style={{width: 180}}
                   placeholder="Select a person">

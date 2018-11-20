@@ -1,7 +1,7 @@
 var mysql = require("mysql");
 
-const NyhetssakDao = require("./NyhetssakDao.js");
-const runsqlfile = require("./runsqlfile.js");
+const NyhetssakDao = require("../dao/NyhetssakDao.js");
+const runsqlfile = require("../dao/runsqlfile.js");
 
 // GitLab CI Pool
 var pool = mysql.createPool({
