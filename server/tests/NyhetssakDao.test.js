@@ -129,8 +129,8 @@ test("Hent nyhetssaker med viktighet 1", done => {
       "Test callback: status " + status + ", data= "+ JSON.stringify(data)
     );
     expect(data.length).toBe(2);
-    expect(data[0].overskrift).toBe("Norge leder");
-    expect(data[1].overskrift).toBe("Apple lanserer ny Iphone");
+    expect(data[0].overskrift).toBe("Apple lanserer ny Iphone");
+    expect(data[1].overskrift).toBe("Norge leder");
     done();
   }
 

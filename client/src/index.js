@@ -116,7 +116,7 @@ class LiveFeed extends Component{
 
 class FramsideVisning extends Component{
   delt = {nyheter: []};
-  antallSakerPrSide = 10;
+  antallSakerPrSide = 9;
   sideNr = 1;
   antallSider = 1;
   sakNrStart = 0;
@@ -133,7 +133,10 @@ class FramsideVisning extends Component{
             <Row  styles={{ margin: 'auto', justifyContent: 'center', alignItems: 'flex-start'}}>
               <div className={"card-columns"}>
               {this.delt.nyheter.map(e => (
-                  <Card key={e.sakID} to={'nyheter/'+e.kategoriNavn+'/'+e.sakID} link={e.bildelink} title={e.overskrift}/>
+                  <Card key={e.sakID} to={'nyheter/'+e.kategoriNavn+'/'+e.sakID} link={e.bildelink} title={e.overskrift}>
+                    Denne artikkelen har {e.antallLikes}
+                        {(e.antallLikes === 1 ) ? (" like") : (" likes")}
+                  </Card>
               ))}
               </div>
             </Row>
@@ -168,9 +171,16 @@ class FramsideVisning extends Component{
       .getNyheter(this.sakNrStart)
       .then(nyheter => {
         this.delt.nyheter=nyheter;
+        this.skiftRekkefolge();
       })
       .catch((error: Error) => Alert.danger(error.message));
+  }
 
+  skiftRekkefolge() {
+    let mellomlagring = this.delt.nyheter.filter((e, i) => i % 3 === 0);
+    mellomlagring = mellomlagring.concat(this.delt.nyheter.filter((e, i) => ((i+2) % 3) === 0));
+    mellomlagring = mellomlagring.concat(this.delt.nyheter.filter((e, i) => ((i+1) % 3) === 0));
+    this.delt.nyheter = mellomlagring;
   }
 
   forrigeSide(){
@@ -180,15 +190,19 @@ class FramsideVisning extends Component{
       .getNyheter(this.sakNrStart)
       .then(nyheter => {
         this.delt.nyheter=nyheter;
+        this.skiftRekkefolge();
       })
       .catch((error: Error) => Alert.danger(error.message));
   }
+
+
 
   mounted(){
     sakService
       .getNyheter(this.sakNrStart)
       .then(nyheter => {
         this.delt.nyheter=nyheter;
+        this.skiftRekkefolge();
       })
       .catch((error: Error) => Alert.danger(error.message));
 
@@ -205,7 +219,7 @@ class FramsideVisning extends Component{
 
 class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
   delt = {kategori: []};
-  antallSakerPrSide = 3;
+  antallSakerPrSide = 9;
   sideNr = 1;
   antallSider = 1;
   antallSaker = 0;
@@ -222,7 +236,10 @@ class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
             <Row  styles={{maxWidth: 1200, margin: 'auto', justifyContent: 'center', alignItems: 'flex-start'}}>
               <div className={"card-columns"}>
                 {this.delt.kategori.map(e => (
-                  <Card key={e.sakID} exact={true} to={'/nyheter/'+e.kategoriNavn+'/'+e.sakID} link={e.bildelink} title={e.overskrift}/>
+                  <Card key={e.sakID} exact={true} to={'/nyheter/'+e.kategoriNavn+'/'+e.sakID} link={e.bildelink} title={e.overskrift}>
+                    Denne artikkelen har {e.antallLikes}
+                      {(e.antallLikes === 1 ) ? (" like") : (" likes")}
+                  </Card>
                 ))}
               </div>
             </Row>
@@ -257,9 +274,17 @@ class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
       .getNyhetssakerGittKategori(this.props.match.params.kategorinavn,this.sakNrStart)
       .then(kat => {
         this.delt.kategori = kat;
+        this.skiftRekkefolge();
       })
       .catch((error: Error) => Alert.danger(error.message));
     }
+
+  skiftRekkefolge() {
+    let mellomlagring = this.delt.kategori.filter((e, i) => i % 3 === 0);
+    mellomlagring = mellomlagring.concat(this.delt.kategori.filter((e, i) => ((i+2) % 3) === 0));
+    mellomlagring = mellomlagring.concat(this.delt.kategori.filter((e, i) => ((i+1) % 3) === 0));
+    this.delt.kategori = mellomlagring;
+  }
 
   forrigeSide(){
     this.sakNrStart-= this.antallSakerPrSide;
@@ -268,6 +293,7 @@ class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
       .getNyhetssakerGittKategori(this.props.match.params.kategorinavn,this.sakNrStart)
       .then(kat => {
         this.delt.kategori = kat;
+        this.skiftRekkefolge();
       })
       .catch((error: Error) => Alert.danger(error.message));
    }
@@ -279,6 +305,7 @@ class Kategori extends Component<{match: { params: { kategorinavn: string }}}>{
       .getNyhetssakerGittKategori(this.props.match.params.kategorinavn,this.sakNrStart)
       .then(kat => {
         this.delt.kategori = kat;
+        this.skiftRekkefolge();
          })
       .catch((error: Error) => Alert.danger(error.message));
 

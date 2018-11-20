@@ -71,7 +71,7 @@ export class Card extends Component<{ title: React.Node,exact?: boolean,link: st
           <img src={this.props.link} className={"card-img-top img-fluid"}/>
           <div className="card-body">
             <h5 className="card-title text-center">{this.props.title}</h5>
-            <div className="card-text">{this.props.children}</div>
+            <div className="card-text"><i>{this.props.children}</i></div>
           </div>
         </NavLink>
       </div>
@@ -263,75 +263,6 @@ class ButtonSuccess extends Component<{
       </button>
     );
   }
-}
-
-class ButtonDanger extends Component<{
-  onClick: () => mixed,
-  children: React.Node
-}> {
-  render() {
-    return (
-      <button type="button" className="btn btn-danger" onClick={this.props.onClick}>
-        {this.props.children}
-      </button>
-    );
-  }
-}
-
-class ButtonLight extends Component<{
-  onClick: () => mixed,
-  children: React.Node
-}> {
-  render() {
-    return (
-      <button type="button" className="btn btn-light" onClick={this.props.onClick}>
-        {this.props.children}
-      </button>
-    );
-  }
-}
-
-/**
- * Renders a button using Bootstrap classes
- */
-export class Button {
-  static Success = ButtonSuccess;
-  static Danger = ButtonDanger;
-  static Light = ButtonLight;
-}
-
-class FormInput extends Component<{
-  type: string,
-  label?: React.Node,
-  value?: mixed,
-  onChange?: (event: SyntheticInputEvent<HTMLInputElement>) => mixed,
-  required?: boolean,
-  pattern?: string,
-  placeholder?: string
-}> {
-  render() {
-    return (
-      <div>
-        <label className="col-sm-1 col-form-label">{this.props.label}</label>
-        <div >
-          <input
-            className="form-control cols=5 row=3"
-            type={this.props.type}
-            value={this.props.value}
-            onChange={this.props.onChange}
-            required={this.props.required}
-            pattern={this.props.pattern}
-          />
-        </div>
-      </div>
-    );
-  }
-}
-/**
- * Renders simplified form elements using Bootstrap classes
- */
-export class Form {
-  static Input = FormInput;
 }
 
 export class Input extends Component<{tittelInput: string,children: React.Node}>{
