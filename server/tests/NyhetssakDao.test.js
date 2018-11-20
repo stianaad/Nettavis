@@ -148,7 +148,7 @@ test("Hent alle nyhetssaker", done => {
     /*expect(data[0].overskrift).toBe("Android tatt for juks");
     expect(data[1].overskrift).toBe("Apple lanserer ny Iphone");
     expect(data[2].overskrift).toBe("FIFA er korrupt");
-    expect(data[3].overskrift).toBe("Norge leder");*/
+    expect(data[3].overskrift).toBe("Norge leder");* /
     done();
   }
 
