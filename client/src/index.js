@@ -91,6 +91,17 @@ class LiveFeed extends Component{
         </ListGroupInline.Item>
       ))}
         </ListGroupInline>
+        <div>
+          <div class="text-center">
+          <h3>Dei va suverene og vann tittelen</h3>
+          <p>Contrary to popular <a href="/#"> link </a>belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
+          <img src="https://www.irishtimes.com/polopoly_fs/1.3486225.1525633083!/image/image.jpg_gen/derivatives/box_620_330/image.jpg" height="100" width="200"/>
+          <p> Ferguson var United sin beste manager gjennom tidene og vann nok et trofe</p>
+          <br/>
+          </div>
+          <h5> Dette er ei mindre overskrift</h5>
+          <p>Contrary to popular <a href="/#"> link </a>belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
+        </div>
       </marquee>
     )
   }
@@ -119,7 +130,7 @@ class LiveFeed extends Component{
 
 class FramsideVisning extends Component{
   delt = {nyheter: []};
-  antallSakerPrSide = 3;
+  antallSakerPrSide = 10;
   sideNr = 1;
   antallSider = 1;
   sakNrStart = 0;
@@ -310,12 +321,11 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
       kategoriNavn: "",
       viktighet: 1
     }};
+
   antKommentarerLastetInn = 5;
   alleKommentarer = [];
   aktivDropDownList = true;
-
   kommentar = new OpprettKommentarer();
-
   buttonColor = "btn btn-default btn-sm ml-2";
   sorteringsRekkefolge= "desc";
   sorterEtterKolonne="kommentarID";
@@ -364,7 +374,7 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
                   <option value={"Mest populære"} key="Mest Populære"> Mest Populære</option>
                 </select>
               </p>
-              <div  className={"card-footer"}>
+              <div className={"card-footer"}>
               <div>
                 <br></br>
                 <form id="kommentarFelt">
@@ -435,7 +445,10 @@ class Nyhetsside extends Component<{match: { params: { sakID: number }}}>{
         .oppdaterLikesKommentar(this.props.match.params.sakID, kommentarID, (noverandreKommentar.antallLikesKommentar + 1))
         .then(() => {
           sakService.getKommentarerGittSak(this.props.match.params.sakID, this.sorterEtterKolonne, this.sorteringsRekkefolge)
-            .then(kommentarer => (this.delt.kommentarer = kommentarer))
+            .then(kommentarer => {
+              this.alleKommentarer = kommentarer;
+              this.delt.kommentarer = kommentarer.slice(0,this.antKommentarerLastetInn);
+            })
             .catch((error: Error) => Alert.danger(error.message));
         })
         .catch((error: Error) => Alert.danger(error.message));
@@ -568,7 +581,7 @@ class EndreNyhetssaker extends Component{
 
   aktivCheckBox = "";
 
-  delt = sharedComponentData({nyhetssaker: []});
+  delt = {nyhetssaker: []};
 
   sok = {
     innhold: ''
@@ -621,17 +634,20 @@ class EndreNyhetssaker extends Component{
             <input
               className={"form-control mr-5"}
               type="text"
+              value={this.sok.innhold}
               placeholder="Søk etter nyhetssak"
               onChange = {this.handterInput}
             />
             <NavLink activeStyle={{ color: 'darkblue' }} to={"/registrerNyhetssak"}>
-              <button className="float-right btn btn-info" >Legg til ny sak</button>
+              <button className="float-right btn btn-success" >Legg til ny sak</button>
             </NavLink>
           </Input>
         <ul className="list-group ">
           {this.delt.nyhetssaker.map(sak => (
             <ListGroup.Item key={sak.sakID}>
+              <NavLink activeStyle={{ color: 'darkblue' }} style={{color: "black"}} to={"/nyheter/"+sak.kategoriNavn+"/"+sak.sakID}>
               {sak.overskrift}
+              </NavLink>
               <Popup trigger={<button className="float-right btn btn-danger"> Slett</button>} position="right center">
                 { close => (
                   <div>
@@ -698,8 +714,11 @@ class EndreNyhetssaker extends Component{
     console.log(sakID);
     sakService
       .slettNyhetssak(sakID)
+      .then( () => {
+        this.mounted();
+        this.sok.innhold = '';
+      })
       .catch((error: Error) => Alert.danger(error.message));
-    this.mounted();
   }
 
 
@@ -758,9 +777,9 @@ class OppdaterNyhetssak extends Component<{match: { params: {sakID: number}}}>{
                      value={this.sak.bildelink}
                      onChange={(event: SyntheticInputEvent<HTMLInputElement>) => (this.sak.bildelink = event.target.value)}/>
             </Input>
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-6">
+            <ContainerFluid >
+              <Row>
+                <Column bredde={6}>
                   <label> Viktighet:</label>
                   <br></br>
                   <select
@@ -771,8 +790,8 @@ class OppdaterNyhetssak extends Component<{match: { params: {sakID: number}}}>{
                     <option value="1" key="1"> Viktighet 1</option>
                     <option value="2" key="2"> Viktighet 2</option>
                   </select>
-                </div>
-                <div className="col-6">
+                </Column>
+                <Column bredde={6}>
                   <label> Kategori:</label>
                   <br></br>
                   <select
@@ -784,9 +803,9 @@ class OppdaterNyhetssak extends Component<{match: { params: {sakID: number}}}>{
                       <option value={e.navn} key={e.navn}> {e.navn}</option>))
                     }
                   </select>
-                </div>
-              </div>
-            </div>
+                </Column>
+              </Row>
+            </ContainerFluid>
             <br></br>
             <div className="form-group">
             <textarea className="form-control" placeholder="Innhold..." rows="6"  id="comment" name="text"
@@ -868,35 +887,35 @@ class RegistrerNyhetssak extends Component{
                    onChange={(event: SyntheticInputEvent<HTMLInputElement>) => (this.opprettSak.bildelink = event.target.value)}/>
           </Input>
           <ContainerFluid>
-            <div className="row">
-              <div className="col-6">
+            <Row>
+              <Column bredde={6}>
                 <label> Viktighet:</label>
                 <br></br>
                   <select
                     onChange={this.viktighetListe}
                     className="form-control float-left "
                     style={{width: 200}}
-                    placeholder="Select a person">
+                    >
                     <option hidden> Velg viktighet</option>
                     <option value={1} key="1"> Viktighet 1</option>
                     <option value={2} key="2"> Viktighet 2</option>
                   </select>
-              </div>
-              <div className="col-6">
+              </Column>
+              <Column bredde={6}>
                 <label> Kategori:</label>
                 <br></br>
                 <select
                   onChange={this.kategoriListe}
                   className="form-control "
                   style={{width: 200}}
-                  placeholder="Select a person">
+                  >
                   <option hidden> Velg kategori</option>
                   {this.alleKategorier.map(e => (
                     <option value={e.navn} key={e.navn}> {e.navn}</option>))
                   }
                 </select>
-              </div>
-            </div>
+              </Column>
+            </Row>
           </ContainerFluid>
           <br></br>
           <div className="form-group">

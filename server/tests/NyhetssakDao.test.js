@@ -238,6 +238,37 @@ test("Hent livefeed", done => {
   );
 });
 
+test("Hent antall saker på framsiden", done => {
+  function callback(status, data){
+    console.log(
+      "Test callback: status " + status + ", data= "+ JSON.stringify(data)
+    );
+    expect(data.length).toBe(1);
+    expect(data[0].antall).toBe(2);
+    done();
+  }
+
+  nyhetssakDao.getAntSakerFramside(
+    callback
+  );
+});
+
+test("Hent antall saker på en gitt kategori", done => {
+  function callback(status, data){
+    console.log(
+      "Test callback: status " + status + ", data= "+ JSON.stringify(data)
+    );
+    expect(data.length).toBe(1);
+    expect(data[0].antall).toBe(2);
+    done();
+  }
+
+  nyhetssakDao.getAntSakerKategori("Tech",
+    callback
+  );
+});
+
+
 
 
 
