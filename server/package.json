@@ -6,23 +6,24 @@
     "start-prod": "cross-env NODE_ENV=production babel-node src/server.js",
     "test": "jest --forceExit"
   },
-  "jest":{
-  "verbose": true,
-  "collectCoverage": true,
-  "coverageReporters": [
-    "json",
-    "html"
-  ],
-  "testPathIgnorePatterns": [
-    "/node_modules/"
-  ]
-},
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "html"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
   "dependencies": {
     "express": "^4.16.4",
+    "js-base64": "^2.4.9",
+    "mysql": "^2.16.0",
     "mysql2": "^1.6.1",
     "reload": "^2.3.1",
-    "sequelize": "^4.41.0",
-    "mysql": "^2.16.0"
+    "sequelize": "^4.41.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
